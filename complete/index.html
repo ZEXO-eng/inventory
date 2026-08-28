@@ -1,5 +1,5 @@
+```html
 <!DOCTYPE html>
-
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
@@ -7,7 +7,10 @@
 <title>مُكمل استبيانات جرد المسؤولين</title>
 
 <style>
-*{box-sizing:border-box}
+
+*{
+  box-sizing:border-box;
+}
 
 :root{
   --bg:#050816;
@@ -23,17 +26,47 @@
   --green:#10b981;
 }
 
-html,body{
+
+/* =========================
+   الصفحة
+   ========================= */
+
+html,
+body{
   margin:0;
   min-height:100%;
-  font-family:Tahoma,Arial,sans-serif;
+
+  font-family:
+    Tahoma,
+    Arial,
+    sans-serif;
+
   background:
-    radial-gradient(circle at 12% 8%,#2563eb35,transparent 30%),
-    radial-gradient(circle at 88% 18%,#06b6d425,transparent 27%),
-    radial-gradient(circle at 50% 100%,#6366f120,transparent 35%),
-    linear-gradient(135deg,#050816,#0a1020 55%,#060b16);
+    radial-gradient(
+      circle at 12% 8%,
+      #2563eb35,
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 88% 18%,
+      #06b6d425,
+      transparent 27%
+    ),
+    radial-gradient(
+      circle at 50% 100%,
+      #6366f120,
+      transparent 35%
+    ),
+    linear-gradient(
+      135deg,
+      #050816,
+      #0a1020 55%,
+      #060b16
+    );
+
   color:var(--text);
 }
+
 
 body{
   min-height:100vh;
@@ -41,480 +74,1111 @@ body{
   position:relative;
 }
 
+
 body::before,
 body::after{
   content:"";
+
   position:fixed;
+
   border-radius:50%;
+
   filter:blur(85px);
+
   pointer-events:none;
+
   opacity:.2;
+
   z-index:0;
 }
+
 
 body::before{
   width:300px;
   height:300px;
+
   background:#2563eb;
+
   top:-120px;
   right:-90px;
 }
 
+
 body::after{
   width:260px;
   height:260px;
+
   background:#06b6d4;
+
   bottom:-120px;
   left:-80px;
 }
 
+
+/* =========================
+   المحتوى الرئيسي
+   ========================= */
+
 .wrap{
-  width:min(1180px,calc(100% - 36px));
+  width:min(
+    1180px,
+    calc(100% - 36px)
+  );
+
   margin:0 auto;
-  padding:34px 0 30px;
+
+  padding:26px 0 24px;
+
   position:relative;
+
   z-index:1;
 }
 
+
+/* =========================
+   العنوان
+   ========================= */
+
 h1{
-  margin:0 0 10px;
-  font-size:clamp(30px,5vw,46px);
+  margin:0 0 7px;
+
+  font-size:clamp(
+    30px,
+    5vw,
+    46px
+  );
+
   letter-spacing:-1px;
-  background:linear-gradient(90deg,#93c5fd,#fff,#67e8f9);
+}
+
+
+.title-text{
+  background:
+    linear-gradient(
+      90deg,
+      #93c5fd,
+      #fff,
+      #67e8f9
+    );
+
   -webkit-background-clip:text;
   background-clip:text;
+
   color:transparent;
+
+  -webkit-text-fill-color:transparent;
 }
+
+
+/*
+  الإيموجي خارج التدرج
+  حتى لا يتحول إلى لون النص
+*/
+
+.emoji{
+  font-family:
+    "Segoe UI Emoji",
+    "Apple Color Emoji",
+    "Noto Color Emoji",
+    sans-serif;
+
+  color:initial !important;
+
+  -webkit-text-fill-color:initial !important;
+
+  background:none !important;
+
+  -webkit-background-clip:initial !important;
+  background-clip:initial !important;
+
+  display:inline-block;
+}
+
 
 .sub{
   color:var(--muted);
-  margin-bottom:28px;
+
+  margin-bottom:14px;
+
   font-size:13px;
-  line-height:1.8;
+
+  line-height:1.7;
 }
+
 
 .wrap > h1,
 .wrap > .sub{
   text-align:center;
 }
 
+
+/* =========================
+   شبكة المربعات
+   ========================= */
+
 .grid{
   display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:20px;
+
+  grid-template-columns:
+    1fr 1fr;
+
+  /*
+    تم تقليل المسافة بين المربعين
+  */
+
+  gap:12px;
 }
+
+
+/* =========================
+   البطاقات
+   ========================= */
 
 .card{
   position:relative;
+
   background:
-    linear-gradient(145deg,rgba(17,27,48,.82),rgba(8,15,29,.68));
+    linear-gradient(
+      145deg,
+      rgba(17,27,48,.82),
+      rgba(8,15,29,.68)
+    );
+
   border:1px solid var(--line);
-  border-radius:22px;
-  padding:19px;
+
+  border-radius:20px;
+
+  padding:16px;
+
   box-shadow:
     0 25px 70px rgba(0,0,0,.4),
     inset 0 1px 0 rgba(255,255,255,.045);
+
   backdrop-filter:blur(18px);
+
   -webkit-backdrop-filter:blur(18px);
+
   overflow:hidden;
 }
 
+
 .card::before{
   content:"";
+
   position:absolute;
+
   width:190px;
   height:190px;
+
   top:-90px;
   right:-70px;
+
   border-radius:50%;
+
   background:#2563eb18;
+
   filter:blur(35px);
+
   pointer-events:none;
 }
 
+
 .card label{
   display:block;
+
   font-weight:800;
-  margin-bottom:11px;
+
+  margin-bottom:8px;
+
   font-size:13px;
+
   color:#cbd5e1;
+
   position:relative;
+
   z-index:1;
 }
 
+
+/* =========================
+   مربعات النص
+   ========================= */
+
 textarea{
   width:100%;
+
   min-height:360px;
+
   resize:vertical;
+
   background:
-    linear-gradient(145deg,rgba(3,9,22,.82),rgba(10,18,34,.72));
+    linear-gradient(
+      145deg,
+      rgba(3,9,22,.82),
+      rgba(10,18,34,.72)
+    );
+
   color:#f8fafc;
-  border:1px solid rgba(148,163,184,.15);
-  border-radius:15px;
-  padding:14px;
+
+  border:1px solid
+    rgba(148,163,184,.15);
+
+  border-radius:14px;
+
+  padding:13px;
+
   line-height:1.8;
-  font-family:Consolas,Tahoma,monospace;
+
+  font-family:
+    Consolas,
+    Tahoma,
+    monospace;
+
   font-size:14px;
+
   direction:rtl;
+
   outline:none;
+
   box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.025),
-    0 10px 30px rgba(0,0,0,.18);
+    inset 0 1px 0
+      rgba(255,255,255,.025),
+
+    0 10px 30px
+      rgba(0,0,0,.18);
+
   transition:.25s ease;
+
   position:relative;
+
   z-index:1;
 }
+
 
 textarea::placeholder{
   color:#64748b;
 }
 
+
 textarea:focus{
-  border-color:rgba(59,130,246,.65);
+  border-color:
+    rgba(59,130,246,.65);
+
   box-shadow:
-    0 0 0 3px rgba(59,130,246,.09),
-    0 15px 40px rgba(0,0,0,.25);
+    0 0 0 3px
+      rgba(59,130,246,.09),
+
+    0 15px 40px
+      rgba(0,0,0,.25);
 }
+
+
+/* =========================
+   الأزرار
+   ========================= */
 
 .buttons{
   display:flex;
-  gap:10px;
+
+  gap:8px;
+
   flex-wrap:wrap;
-  margin-top:13px;
+
+  margin-top:9px;
 }
 
+
 button{
-  border:1px solid rgba(255,255,255,.08);
-  border-radius:11px;
-  padding:11px 17px;
+  border:1px solid
+    rgba(255,255,255,.08);
+
+  border-radius:10px;
+
+  padding:10px 15px;
+
   font-weight:700;
+
   cursor:pointer;
+
   color:white;
+
   transition:.22s ease;
+
+  font-family:
+    Tahoma,
+    Arial,
+    sans-serif;
 }
+
 
 button:hover{
   transform:translateY(-2px);
+
   filter:brightness(1.08);
 }
 
-.paste{
-  background:linear-gradient(135deg,#059669,#047857);
-  box-shadow:0 10px 28px rgba(5,150,105,.18);
+
+/* =========================
+   إيموجيات الأزرار
+   ========================= */
+
+button .emoji{
+  font-family:
+    "Segoe UI Emoji",
+    "Apple Color Emoji",
+    "Noto Color Emoji",
+    sans-serif;
+
+  color:initial !important;
+
+  -webkit-text-fill-color:initial !important;
 }
+
+
+/* =========================
+   ألوان الأزرار
+   ========================= */
+
+.paste{
+  background:
+    linear-gradient(
+      135deg,
+      #059669,
+      #047857
+    );
+
+  box-shadow:
+    0 10px 28px
+      rgba(5,150,105,.18);
+}
+
 
 .clear{
-  background:rgba(220,38,38,.82);
-  box-shadow:0 10px 28px rgba(220,38,38,.13);
+  background:
+    rgba(220,38,38,.82);
+
+  box-shadow:
+    0 10px 28px
+      rgba(220,38,38,.13);
 }
+
 
 .copy{
-  background:linear-gradient(135deg,#7c3aed,#6d28d9);
-  box-shadow:0 10px 28px rgba(124,58,237,.18);
+  background:
+    linear-gradient(
+      135deg,
+      #7c3aed,
+      #6d28d9
+    );
+
+  box-shadow:
+    0 10px 28px
+      rgba(124,58,237,.18);
 }
+
 
 .main{
-  background:linear-gradient(135deg,#f97316,#ea580c);
+  background:
+    linear-gradient(
+      135deg,
+      #f97316,
+      #ea580c
+    );
+
   font-size:15px;
-  box-shadow:0 10px 30px rgba(249,115,22,.2);
+
+  box-shadow:
+    0 10px 30px
+      rgba(249,115,22,.2);
 }
 
+
+/* =========================
+   الحالة
+   ========================= */
+
 .status{
-  margin-top:11px;
-  min-height:22px;
+  margin-top:8px;
+
+  min-height:20px;
+
   color:#93c5fd;
+
   font-size:13px;
+
   line-height:1.7;
 }
 
+
+/* =========================
+   النتيجة
+   ========================= */
+
 .result{
   min-height:400px;
-  margin-top:20px;
+
+  /*
+    تقليل المسافة عن المربعات
+  */
+
+  margin-top:12px;
 }
+
 
 .result textarea{
   min-height:400px;
 }
 
+
+/* =========================
+   الملاحظة
+   ========================= */
+
 .note{
-  margin-top:16px;
-  padding:12px 14px;
-  border-radius:12px;
-  background:rgba(255,255,255,.035);
-  border:1px solid rgba(148,163,184,.11);
+  margin-top:11px;
+
+  padding:10px 12px;
+
+  border-radius:11px;
+
+  background:
+    rgba(255,255,255,.035);
+
+  border:1px solid
+    rgba(148,163,184,.11);
+
   font-size:12px;
+
   color:#94a3b8;
+
   line-height:1.9;
 }
 
+
+/* =========================
+   الجوال
+   ========================= */
+
 @media(max-width:850px){
+
   .grid{
     grid-template-columns:1fr;
+
+    gap:10px;
   }
+
 }
 
+
 @media(max-width:600px){
+
   .wrap{
-    width:min(100% - 24px,620px);
-    padding-top:22px;
+    width:min(
+      100% - 24px,
+      620px
+    );
+
+    padding-top:20px;
   }
+
 
   h1{
     font-size:30px;
   }
 
+
   .card{
-    padding:14px;
-    border-radius:18px;
+    padding:13px;
+
+    border-radius:17px;
   }
+
 
   .buttons{
     flex-direction:column;
   }
 
+
   button{
     width:100%;
   }
-}
-</style>
 
+}
+
+</style>
 </head>
+
 
 <body>
 
 <div class="wrap">
 
-  <h1>📋 مُكمل استبيانات جرد المسؤولين</h1>
+
+  <!-- العنوان -->
+
+  <h1>
+    <span class="emoji">📋</span>
+    <span class="title-text">
+      مُكمل استبيانات جرد المسؤولين
+    </span>
+  </h1>
+
 
   <div class="sub">
     يحسب ويملأ الحقول المطلوبة فقط، مع إبقاء بقية الاستبيان كما هو.
   </div>
 
+
+  <!-- =========================
+       المربعات الأساسية
+       ========================= -->
+
   <div class="grid">
 
-```
-<div class="card">
-  <label>استبيان الجرد الأساسي</label>
 
-  <textarea id="inventory" placeholder="الصق استبيان الجرد الأساسي هنا..."></textarea>
+    <!-- الجرد الأساسي -->
 
-  <div class="buttons">
-    <button class="paste" onclick="pasteInto('inventory','status1')">
-      📋 لصق الاستبيان هنا
-    </button>
+    <div class="card">
 
-    <button class="clear" onclick="clearOne('inventory')">
-      مسح
-    </button>
+      <label>
+        استبيان الجرد الأساسي
+      </label>
+
+
+      <textarea
+        id="inventory"
+        placeholder="الصق استبيان الجرد الأساسي هنا..."
+      ></textarea>
+
+
+      <div class="buttons">
+
+        <button
+          class="paste"
+          onclick="pasteInto('inventory','status1')"
+        >
+          <span class="emoji">📋</span>
+          لصق الاستبيان هنا
+        </button>
+
+
+        <button
+          class="clear"
+          onclick="clearOne('inventory')"
+        >
+          مسح
+        </button>
+
+      </div>
+
+
+      <div
+        id="status1"
+        class="status"
+      ></div>
+
+    </div>
+
+
+    <!-- تقييم المسؤوليات -->
+
+    <div class="card">
+
+      <label>
+        استبيان تقييم المسؤوليات
+      </label>
+
+
+      <textarea
+        id="responsibilities"
+        placeholder="الصق استبيان تقييم المسؤوليات هنا..."
+      ></textarea>
+
+
+      <div class="buttons">
+
+        <button
+          class="paste"
+          onclick="pasteInto('responsibilities','status2')"
+        >
+          <span class="emoji">📋</span>
+          لصق تقييم المسؤوليات هنا
+        </button>
+
+
+        <button
+          class="clear"
+          onclick="clearOne('responsibilities')"
+        >
+          مسح
+        </button>
+
+      </div>
+
+
+      <div
+        id="status2"
+        class="status"
+      ></div>
+
+    </div>
+
   </div>
 
-  <div id="status1" class="status"></div>
-</div>
 
-<div class="card">
-  <label>استبيان تقييم المسؤوليات</label>
-
-  <textarea id="responsibilities" placeholder="الصق استبيان تقييم المسؤوليات هنا..."></textarea>
-
-  <div class="buttons">
-    <button class="paste" onclick="pasteInto('responsibilities','status2')">
-      📋 لصق تقييم المسؤوليات هنا
-    </button>
-
-    <button class="clear" onclick="clearOne('responsibilities')">
-      مسح
-    </button>
-  </div>
-
-  <div id="status2" class="status"></div>
-</div>
-```
-
-  </div>
+  <!-- =========================
+       النتيجة
+       ========================= -->
 
   <div class="card result">
 
-```
-<label>النتيجة</label>
+    <label>
+      النتيجة
+    </label>
 
-<textarea id="output" readonly placeholder="ستظهر النتيجة هنا..."></textarea>
 
-<div class="buttons">
-  <button class="main" onclick="completeSurvey()">
-    ✅ إكمال الاستبيان
-  </button>
+    <textarea
+      id="output"
+      readonly
+      placeholder="ستظهر النتيجة هنا..."
+    ></textarea>
 
-  <button class="copy" onclick="copyResult()">
-    📄 نسخ النتيجة
-  </button>
 
-  <button class="clear" onclick="clearAll()">
-    🗑️ مسح الكل
-  </button>
-</div>
+    <div class="buttons">
 
-<div id="status3" class="status"></div>
+      <button
+        class="main"
+        onclick="completeSurvey()"
+      >
+        <span class="emoji">✅</span>
+        إكمال الاستبيان
+      </button>
 
-<div class="note">
-  البونص مستقل: إكمال 16 ساعة خلال الأسبوع = 50 نقطة إضافية، أو إكمال 400 صورة في 📷〡مراقبة・السيناريوهات = 50 نقطة إضافية. يمكن الحصول على البونصين معًا إذا تحقق الشرطان.
-</div>
-```
+
+      <button
+        class="copy"
+        onclick="copyResult()"
+      >
+        <span class="emoji">📄</span>
+        نسخ النتيجة
+      </button>
+
+
+      <button
+        class="clear"
+        onclick="clearAll()"
+      >
+        <span class="emoji">🗑️</span>
+        مسح الكل
+      </button>
+
+    </div>
+
+
+    <div
+      id="status3"
+      class="status"
+    ></div>
+
+
+    <div class="note">
+
+      البونص مستقل:
+      إكمال 16 ساعة خلال الأسبوع =
+      50 نقطة إضافية،
+
+      أو إكمال 400 صورة في
+
+      <span class="emoji">📷</span>
+
+      〡مراقبة・السيناريوهات =
+      50 نقطة إضافية.
+
+      يمكن الحصول على البونصين معًا
+      إذا تحقق الشرطان.
+
+    </div>
 
   </div>
 
 </div>
 
+
 <script>
 
-document.querySelectorAll('textarea').forEach(el=>{
-  el.addEventListener('paste',()=>setTimeout(()=>{},0));
-});
+
+/* =========================
+   اللصق
+   ========================= */
+
+document
+  .querySelectorAll('textarea')
+  .forEach(el=>{
+
+    el.addEventListener(
+      'paste',
+      ()=>setTimeout(
+        ()=>{},
+        0
+      )
+    );
+
+  });
 
 
-async function pasteInto(id,statusId){
-  const box=document.getElementById(id);
-  const status=document.getElementById(statusId);
+async function pasteInto(
+  id,
+  statusId
+){
+
+  const box=
+    document.getElementById(id);
+
+  const status=
+    document.getElementById(
+      statusId
+    );
+
 
   try{
-    const text=await navigator.clipboard.readText();
+
+    const text=
+      await navigator
+        .clipboard
+        .readText();
+
 
     if(!text){
-      status.textContent='⚠️ الحافظة فارغة.';
+
+      status.textContent=
+        '⚠️ الحافظة فارغة.';
+
       return;
     }
 
+
     box.value=text;
-    box.dispatchEvent(new Event('input',{bubbles:true}));
-    status.textContent='✅ تم اللصق من الحافظة.';
+
+
+    box.dispatchEvent(
+      new Event(
+        'input',
+        {bubbles:true}
+      )
+    );
+
+
+    status.textContent=
+      '✅ تم اللصق من الحافظة.';
 
   }catch(e){
+
     box.focus();
-    status.textContent='⚠️ المتصفح منع القراءة المباشرة للحافظة. اضغط Ctrl+V هنا للسماح باللصق.';
+
+    status.textContent=
+      '⚠️ المتصفح منع القراءة المباشرة للحافظة. اضغط Ctrl+V هنا للسماح باللصق.';
   }
+
 }
 
 
+/* =========================
+   المسح
+   ========================= */
+
 function clearOne(id){
-  document.getElementById(id).value='';
+
+  document
+    .getElementById(id)
+    .value='';
 }
 
 
 function clearAll(){
-  ['inventory','responsibilities','output']
-    .forEach(id=>document.getElementById(id).value='');
 
-  ['status1','status2','status3']
-    .forEach(id=>document.getElementById(id).textContent='');
+  [
+    'inventory',
+    'responsibilities',
+    'output'
+  ]
+  .forEach(
+    id=>
+      document
+        .getElementById(id)
+        .value=''
+  );
+
+
+  [
+    'status1',
+    'status2',
+    'status3'
+  ]
+  .forEach(
+    id=>
+      document
+        .getElementById(id)
+        .textContent=''
+  );
+
 }
 
+
+/* =========================
+   النسخ
+   ========================= */
 
 async function copyResult(){
 
-  const out=document.getElementById('output').value;
+  const out=
+    document
+      .getElementById('output')
+      .value;
+
 
   if(!out)return;
 
+
   try{
 
-    await navigator.clipboard.writeText(out);
+    await navigator
+      .clipboard
+      .writeText(out);
 
-    document.getElementById('status3').textContent='✅ تم نسخ النتيجة.';
+
+    document
+      .getElementById('status3')
+      .textContent=
+        '✅ تم نسخ النتيجة.';
 
   }catch(e){
 
-    document.getElementById('output').focus();
-    document.execCommand('selectAll');
-    document.execCommand('copy');
+    document
+      .getElementById('output')
+      .focus();
 
-    document.getElementById('status3').textContent='✅ تم نسخ النتيجة.';
+
+    document.execCommand(
+      'selectAll'
+    );
+
+
+    document.execCommand(
+      'copy'
+    );
+
+
+    document
+      .getElementById('status3')
+      .textContent=
+        '✅ تم نسخ النتيجة.';
   }
+
 }
 
 
+/* =========================
+   تحويل الأرقام
+   ========================= */
+
 function num(s){
 
-  const m=String(s??'')
-    .replace(/[٠-٩]/g,d=>String('٠١٢٣٤٥٦٧٨٩'.indexOf(d)))
-    .match(/-?\d+(?:[.,]\d+)?/);
+  const m=
+    String(s??'')
+      .replace(
+        /[٠-٩]/g,
+        d=>
+          String(
+            '٠١٢٣٤٥٦٧٨٩'
+              .indexOf(d)
+          )
+      )
+      .match(
+        /-?\d+(?:[.,]\d+)?/
+      );
+
 
   return m
-    ? parseFloat(m[0].replace(',','.'))
+    ? parseFloat(
+        m[0].replace(
+          ',',
+          '.'
+        )
+      )
     : 0;
 }
 
 
+/* =========================
+   التطبيع
+   ========================= */
+
 function normalize(s){
 
   return String(s||'')
-    .replace(/[٠-٩]/g,d=>String('٠١٢٣٤٥٦٧٨٩'.indexOf(d)))
-    .replace(/ي/g,'ي')
+    .replace(
+      /[٠-٩]/g,
+      d=>
+        String(
+          '٠١٢٣٤٥٦٧٨٩'
+            .indexOf(d)
+        )
+    )
+    .replace(
+      /ي/g,
+      'ي'
+    )
     .trim();
 }
 
 
-function getLine(text,label){
+/* =========================
+   قراءة السطر
+   ========================= */
 
-  const lines=text.split(/\r?\n/);
-  const target=normalize(label);
+function getLine(
+  text,
+  label
+){
 
-  for(const line of lines){
+  const lines=
+    text.split(/\r?\n/);
 
-    const n=normalize(line);
+  const target=
+    normalize(label);
 
-    if(n.includes(target)){
 
-      const p=line.indexOf(':');
+  for(
+    const line of lines
+  ){
+
+    const n=
+      normalize(line);
+
+
+    if(
+      n.includes(target)
+    ){
+
+      const p=
+        line.indexOf(':');
+
 
       return p>=0
-        ? line.slice(p+1).trim()
+        ? line
+            .slice(p+1)
+            .trim()
         : '';
     }
+
   }
+
 
   return '';
 }
 
 
-function replaceField(text,label,value){
+/* =========================
+   استبدال الحقل
+   ========================= */
 
-  const re=new RegExp(
-    '(^[ \\t]*'+
-    label.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+
-    '[ \\t]*:)[^\\r\\n]*',
-    'mi'
-  );
+function replaceField(
+  text,
+  label,
+  value
+){
+
+  const re=
+    new RegExp(
+      '(^[ \\t]*'+
+      label.replace(
+        /[.*+?^${}()|[\]\\]/g,
+        '\\$&'
+      )+
+      '[ \\t]*:)[^\\r\\n]*',
+      'mi'
+    );
+
 
   if(re.test(text))
-    return text.replace(re,'$1 '+value);
+    return text.replace(
+      re,
+      '$1 '+value
+    );
+
 
   return text;
 }
 
 
-function replaceAny(text,labels,value){
+function replaceAny(
+  text,
+  labels,
+  value
+){
 
-  for(const label of labels){
+  for(
+    const label of labels
+  ){
 
     const before=text;
 
-    text=replaceField(text,label,value);
 
-    if(text!==before)
+    text=
+      replaceField(
+        text,
+        label,
+        value
+      );
+
+
+    if(
+      text!==before
+    )
       return text;
   }
+
 
   return text;
 }
 
 
-function findTriple(text,label){
+/* =========================
+   قراءة ثلاثة أرقام
+   ========================= */
 
-  const v=getLine(text,label);
-  const a=v.match(/\d+/g);
+function findTriple(
+  text,
+  label
+){
 
-  return a&&a.length>=3
-    ? [+a[0],+a[1],+a[2]]
-    : [0,0,0];
+  const v=
+    getLine(
+      text,
+      label
+    );
+
+
+  const a=
+    v.match(
+      /\d+/g
+    );
+
+
+  return(
+    a &&
+    a.length>=3
+  )
+    ? [
+        +a[0],
+        +a[1],
+        +a[2]
+      ]
+    : [
+        0,
+        0,
+        0
+      ];
 }
 
 
@@ -527,58 +1191,92 @@ function rating(points){
   if(points<=150)
     return 'سيء';
 
+
   if(points<=250)
     return 'جيد جداً';
+
 
   if(points<=400)
     return 'ممتاز';
 
+
   if(points>=401)
     return 'ممتاز جداً';
+
 
   return 'غير محدد';
 }
 
 
 const rank={
+
   'سيء':0,
+
   'جيد جداً':1,
+
   'ممتاز':2,
+
   'ممتاز جداً':3
+
 };
 
 
 const rankName=[
+
   'سيء',
+
   'جيد جداً',
+
   'ممتاز',
+
   'ممتاز جداً'
+
 ];
 
 
 /* =========================
    تقييم المسؤوليات
-   مراقبة اللوقات مستثناة
    ========================= */
 
 function responsibilityRating(text){
 
   const labels=[
+
     'مسؤول تدقيق الصور',
+
     'مسؤول الملاحظات',
+
     'مسؤول الاجازات',
+
     'مسؤول الإجازات',
+
     'مسؤول التحذيرات',
+
     'مسؤول دفتر الحضور'
+
   ];
+
 
   let vals=[];
 
-  for(const l of labels){
 
-    const v=normalize(getLine(text,l))
-      .replace(/\s+/g,' ')
+  for(
+    const l of labels
+  ){
+
+    const v=
+      normalize(
+        getLine(
+          text,
+          l
+        )
+      )
+      .replace(
+        /\s+/g,
+        ' '
+      )
       .trim();
+
 
     if(
       !v ||
@@ -588,22 +1286,34 @@ function responsibilityRating(text){
       continue;
 
 
-    if(/ممتاز\s*جداً|ممتاز\s*جدا/.test(v)){
+    if(
+      /ممتاز\s*جداً|ممتاز\s*جدا/
+        .test(v)
+    ){
 
       vals.push(3);
 
-    }else if(/جيد\s*جداً|جيد\s*جدا/.test(v)){
+    }else if(
+      /جيد\s*جداً|جيد\s*جدا/
+        .test(v)
+    ){
 
       vals.push(1);
 
-    }else if(/ممتاز/.test(v)){
+    }else if(
+      /ممتاز/.test(v)
+    ){
 
       vals.push(2);
 
-    }else if(/سيء|سيئ/.test(v)){
+    }else if(
+      /سيء|سيئ/.test(v)
+    ){
 
       vals.push(0);
+
     }
+
   }
 
 
@@ -611,19 +1321,23 @@ function responsibilityRating(text){
     return 'غير محدد';
 
 
-  const highest=Math.max(...vals);
+  const highest=
+    Math.max(...vals);
 
-  const badCount=vals.filter(x=>x===0).length;
 
+  const badCount=
+    vals.filter(
+      x=>x===0
+    ).length;
 
-  /*
-    كل تقييم سيء ينزل مرتبة واحدة
-    من أعلى تقييم.
-  */
 
   return rankName[
-    Math.max(0,highest-badCount)
+    Math.max(
+      0,
+      highest-badCount
+    )
   ];
+
 }
 
 
@@ -631,27 +1345,30 @@ function responsibilityRating(text){
    التقييم النهائي
    ========================= */
 
-function finalRating(base,respons){
+function finalRating(
+  base,
+  respons
+){
 
-  if(!(base in rank) || !(respons in rank))
+  if(
+    !(base in rank) ||
+    !(respons in rank)
+  )
     return base;
 
 
-  /*
-    التقييم النهائي يعتمد على مقارنة
-    تقييم القسم مع تقييم المسؤوليات.
-
-    إذا كان تقييم المسؤوليات أقل:
-    ننزل تقييم القسم مرتبة واحدة فقط.
-
-    لا ننزل تقييم المسؤوليات.
-  */
-
-  if(rank[respons] < rank[base]){
+  if(
+    rank[respons] <
+    rank[base]
+  ){
 
     return rankName[
-      Math.max(0,rank[base]-1)
+      Math.max(
+        0,
+        rank[base]-1
+      )
     ];
+
   }
 
 
@@ -660,10 +1377,12 @@ function finalRating(base,respons){
 
 
 /* =========================
-   نقاط تفاعل المسؤوليات
+   نقاط المسؤوليات
    ========================= */
 
-function responsibilityInteractionPoints(text){
+function responsibilityInteractionPoints(
+  text
+){
 
   const bonuses=[
 
@@ -675,12 +1394,14 @@ function responsibilityInteractionPoints(text){
       points:50
     },
 
+
     {
       labels:[
         'مسؤول مراقبة اللوقات'
       ],
       points:75
     },
+
 
     {
       labels:[
@@ -689,6 +1410,7 @@ function responsibilityInteractionPoints(text){
       points:75
     },
 
+
     {
       labels:[
         'مسؤول تدقيق الصور'
@@ -696,27 +1418,42 @@ function responsibilityInteractionPoints(text){
       points:75
     },
 
+
     {
       labels:[
         'مسؤول دفتر الحضور'
       ],
       points:100
     }
+
   ];
 
 
   let total=0;
 
 
-  for(const item of bonuses){
+  for(
+    const item of bonuses
+  ){
 
     let found=false;
 
 
-    for(const label of item.labels){
+    for(
+      const label of item.labels
+    ){
 
-      const value=normalize(getLine(text,label))
-        .replace(/\s+/g,' ')
+      const value=
+        normalize(
+          getLine(
+            text,
+            label
+          )
+        )
+        .replace(
+          /\s+/g,
+          ' '
+        )
         .trim();
 
 
@@ -728,24 +1465,24 @@ function responsibilityInteractionPoints(text){
         continue;
 
 
-      /*
-        نقاط المسؤولية تُحسب عند ممتاز
-        أو ممتاز جداً.
-      */
-
       if(
-        /ممتاز\s*جداً|ممتاز\s*جدا/.test(value) ||
+        /ممتاز\s*جداً|ممتاز\s*جدا/
+          .test(value)
+        ||
         /ممتاز/.test(value)
       ){
 
         found=true;
+
         break;
       }
+
     }
 
 
     if(found)
       total+=item.points;
+
   }
 
 
@@ -757,13 +1494,26 @@ function responsibilityInteractionPoints(text){
    تحديد جرد الأعضاء
    ========================= */
 
-function isMemberInventory(text){
+function isMemberInventory(
+  text
+){
 
-  const n=normalize(text)
-    .replace(/\s+/g,' ');
+  const n=
+    normalize(text)
+      .replace(
+        /\s+/g,
+        ' '
+      );
 
-  return /جرد\s*الاعضاء|جرد\s*الأعضاء/.test(n)
-    || /عدد\s*ساعات\s*مراقب\s*سرقات/.test(n);
+
+  return(
+    /جرد\s*الاعضاء|جرد\s*الأعضاء/
+      .test(n)
+    ||
+    /عدد\s*ساعات\s*مراقب\s*سرقات/
+      .test(n)
+  );
+
 }
 
 
@@ -771,22 +1521,37 @@ function isMemberInventory(text){
    ساعات جرد الأعضاء
    ========================= */
 
-function getMemberRobberyHours(text){
+function getMemberRobberyHours(
+  text
+){
 
-  const value=getLine(
-    text,
-    'عدد ساعات مراقب سرقات'
-  );
+  const value=
+    getLine(
+      text,
+      'عدد ساعات مراقب سرقات'
+    );
 
-  const tm=value.match(
-    /^\s*(\d+)\s*:\s*(\d{1,2})\s*$/
-  );
+
+  const tm=
+    value.match(
+      /^\s*(\d+)\s*:\s*(\d{1,2})\s*$/
+    );
 
 
   if(tm){
 
-    return parseInt(tm[1],10)
-      + parseInt(tm[2],10)/60;
+    return(
+      parseInt(
+        tm[1],
+        10
+      )
+      +
+      parseInt(
+        tm[2],
+        10
+      )/60
+    );
+
   }
 
 
@@ -800,20 +1565,37 @@ function getMemberRobberyHours(text){
 
 function completeSurvey(){
 
-  const inv=document.getElementById('inventory').value;
-  const resp=document.getElementById('responsibilities').value;
+  const inv=
+    document
+      .getElementById(
+        'inventory'
+      )
+      .value;
+
+
+  const resp=
+    document
+      .getElementById(
+        'responsibilities'
+      )
+      .value;
 
 
   if(!inv.trim()){
 
-    document.getElementById('status3').textContent=
-      '⚠️ أدخل استبيان الجرد الأساسي أولاً.';
+    document
+      .getElementById(
+        'status3'
+      )
+      .textContent=
+        '⚠️ أدخل استبيان الجرد الأساسي أولاً.';
 
     return;
   }
 
 
-  const memberInventory=isMemberInventory(inv);
+  const memberInventory=
+    isMemberInventory(inv);
 
 
   /* =========================
@@ -822,47 +1604,60 @@ function completeSurvey(){
 
   if(memberInventory){
 
-    const rawHours=getMemberRobberyHours(inv);
-
-    const hours=Math.round(rawHours);
-
-
-    const jew=findTriple(
-      inv,
-      'عدد مراقبة المجوهرات + البنوك + اليخت'
-    );
-
-    const official=findTriple(
-      inv,
-      'عدد مراقبة سيناريوهات البنك المركزي + الميترو + الاستوديو'
-    );
-
-    const shops=findTriple(
-      inv,
-      'عدد مراقبة سرقة المنزل + بقالة + مصرف'
-    );
+    const rawHours=
+      getMemberRobberyHours(
+        inv
+      );
 
 
-    /*
-      نقاط السيناريوهات
-    */
+    const hours=
+      Math.round(
+        rawHours
+      );
+
+
+    const jew=
+      findTriple(
+        inv,
+        'عدد مراقبة المجوهرات + البنوك + اليخت'
+      );
+
+
+    const official=
+      findTriple(
+        inv,
+        'عدد مراقبة سيناريوهات البنك المركزي + الميترو + الاستوديو'
+      );
+
+
+    const shops=
+      findTriple(
+        inv,
+        'عدد مراقبة سرقة المنزل + بقالة + مصرف'
+      );
+
 
     let scenario=
 
-      official.reduce((a,b)=>a+b,0)*6
+      official.reduce(
+        (a,b)=>a+b,
+        0
+      )*6
 
       +
 
-      jew.reduce((a,b)=>a+b,0)*5
+      jew.reduce(
+        (a,b)=>a+b,
+        0
+      )*5
 
       +
 
-      shops.reduce((a,b)=>a+b,0)*3;
+      shops.reduce(
+        (a,b)=>a+b,
+        0
+      )*3;
 
-
-    /*
-      بونص 400 صورة
-    */
 
     const imgLine=
 
@@ -886,7 +1681,8 @@ function completeSurvey(){
       );
 
 
-    const imgCount=num(imgLine);
+    const imgCount=
+      num(imgLine);
 
 
     if(
@@ -896,86 +1692,89 @@ function completeSurvey(){
       scenario+=50;
 
 
-    /*
-      بونص 16 ساعة
-    */
-
     if(hours>=16)
       scenario+=50;
 
 
-    /*
-      كل ساعة = 30 نقطة
-    */
+    const hourPoints=
+      hours*30;
 
-    const hourPoints=hours*30;
-
-
-    /*
-      جرد الأعضاء لا يعتمد على
-      استبيان المسؤوليات.
-    */
 
     const total=
       hourPoints+
       scenario;
 
 
-    const base=rating(total);
+    const base=
+      rating(total);
 
 
     let out=inv;
 
 
-    out=replaceAny(
-      out,
-      [
-        'اجمالي نقاط السيناريوهات',
-        'إجمالي نقاط السيناريوهات'
-      ],
-      scenario
-    );
+    out=
+      replaceAny(
+        out,
+        [
+          'اجمالي نقاط السيناريوهات',
+          'إجمالي نقاط السيناريوهات'
+        ],
+        scenario
+      );
 
 
-    out=replaceAny(
-      out,
-      [
-        'مجموع البوينتات',
-        'اجمالي البوينتات',
-        'إجمالي البوينتات'
-      ],
-      total
-    );
+    out=
+      replaceAny(
+        out,
+        [
+          'مجموع البوينتات',
+          'اجمالي البوينتات',
+          'إجمالي البوينتات'
+        ],
+        total
+      );
 
 
-    out=replaceAny(
-      out,
-      ['التقييم'],
-      base
-    );
+    out=
+      replaceAny(
+        out,
+        [
+          'التقييم'
+        ],
+        base
+      );
 
 
-    out=replaceAny(
-      out,
-      [
-        'التقيم النهائي',
-        'التقييم النهائي'
-      ],
-      base
-    );
+    out=
+      replaceAny(
+        out,
+        [
+          'التقيم النهائي',
+          'التقييم النهائي'
+        ],
+        base
+      );
 
 
-    document.getElementById('output').value=out;
+    document
+      .getElementById(
+        'output'
+      )
+      .value=out;
 
 
-    document.getElementById('status3').textContent=
-      '✅ تم إكمال جرد الأعضاء. الساعات: '+
-      hours+
-      ' ساعة = '+
-      hourPoints+
-      ' نقطة | نقاط السيناريوهات: '+
-      scenario+
-      ' نقطة.';
+    document
+      .getElementById(
+        'status3'
+      )
+      .textContent=
+        '✅ تم إكمال جرد الأعضاء. الساعات: '+
+        hours+
+        ' ساعة = '+
+        hourPoints+
+        ' نقطة | نقاط السيناريوهات: '+
+        scenario+
+        ' نقطة.';
 
 
     return;
@@ -986,7 +1785,9 @@ function completeSurvey(){
      استخراج ساعات تسجيل الدخول
      ========================= */
 
-  function getLoginHours(text){
+  function getLoginHours(
+    text
+  ){
 
     const directLabels=[
 
@@ -1007,52 +1808,74 @@ function completeSurvey(){
       'اجمالي الساعات',
 
       'إجمالي الساعات'
+
     ];
 
 
-    /*
-      قراءة مجموع الساعات أولاً
-    */
+    for(
+      const label of directLabels
+    ){
 
-    for(const label of directLabels){
-
-      const value=getLine(text,label);
+      const value=
+        getLine(
+          text,
+          label
+        );
 
 
       if(value!==''){
 
-        const tm=value.match(
-          /^\s*(\d+)\s*:\s*(\d{1,2})\s*$/
-        );
+        const tm=
+          value.match(
+            /^\s*(\d+)\s*:\s*(\d{1,2})\s*$/
+          );
 
 
         if(tm){
 
-          const h=parseInt(tm[1],10);
-          const m=parseInt(tm[2],10);
+          const h=
+            parseInt(
+              tm[1],
+              10
+            );
 
-          return h+(m/60);
+
+          const m=
+            parseInt(
+              tm[2],
+              10
+            );
+
+
+          return(
+            h+
+            m/60
+          );
         }
 
 
         if(/\d/.test(value))
           return num(value);
+
       }
+
     }
 
 
-    /*
-      البحث عن أي سطر يحتوي
-      تسجيل الدخول + ساعات
-    */
-
-    const lines=text.split(/\r?\n/);
+    const lines=
+      text.split(/\r?\n/);
 
 
-    for(const line of lines){
+    for(
+      const line of lines
+    ){
 
-      const n=normalize(line)
-        .replace(/\s+/g,' ');
+      const n=
+        normalize(line)
+          .replace(
+            /\s+/g,
+            ' '
+          );
 
 
       if(
@@ -1061,88 +1884,107 @@ function completeSurvey(){
         /\d/.test(n)
       ){
 
-        const p=line.indexOf(':');
+        const p=
+          line.indexOf(':');
+
 
         const value=
           p>=0
-            ? line.slice(p+1).trim()
+            ? line
+                .slice(p+1)
+                .trim()
             : line.trim();
 
 
-        const tm=value.match(
-          /^\s*(\d+)\s*:\s*(\d{1,2})\s*$/
-        );
+        const tm=
+          value.match(
+            /^\s*(\d+)\s*:\s*(\d{1,2})\s*$/
+          );
 
 
         if(tm){
 
-          return parseInt(tm[1],10)
-            +parseInt(tm[2],10)/60;
+          return(
+            parseInt(
+              tm[1],
+              10
+            )
+            +
+            parseInt(
+              tm[2],
+              10
+            )/60
+          );
         }
 
 
         return num(value);
       }
+
     }
 
 
-    /*
-      الاستبيانات القديمة
-      التي توزع الساعات.
-    */
-
-    return num(
-      getLine(text,'ساعات مراقب سرقات')
-    )
-
-    +
-
-    num(
-      getLine(text,'ساعات مراقب سيناريوهات')
-    )
-
-    +
-
-    num(
-      getLine(text,'ساعات مراقب عام')
+    return(
+      num(
+        getLine(
+          text,
+          'ساعات مراقب سرقات'
+        )
+      )
+      +
+      num(
+        getLine(
+          text,
+          'ساعات مراقب سيناريوهات'
+        )
+      )
+      +
+      num(
+        getLine(
+          text,
+          'ساعات مراقب عام'
+        )
+      )
     );
+
   }
 
 
-  const rawHours=getLoginHours(inv);
+  const rawHours=
+    getLoginHours(inv);
 
-  /*
-    تقريب الساعات لأقرب ساعة:
-    1:31 = 2
-    2:29 = 2
-    2:30 = 3
-  */
 
-  const hours=Math.round(rawHours);
+  const hours=
+    Math.round(
+      rawHours
+    );
 
 
   /* =========================
      نقاط السيناريوهات
      ========================= */
 
-  const shared=num(
-    getLine(
+  const shared=
+    num(
+      getLine(
+        inv,
+        'عدد مراقبة السيناريو المشترك'
+      )
+    );
+
+
+  const jew=
+    findTriple(
       inv,
-      'عدد مراقبة السيناريو المشترك'
-    )
-  );
+      'عدد مراقبة المجوهرات + البنوك + اليخت'
+    );
 
 
-  const jew=findTriple(
-    inv,
-    'عدد مراقبة المجوهرات + البنوك + اليخت'
-  );
-
-
-  const official=findTriple(
-    inv,
-    'عدد مراقبة سيناريوهات البنك المركزي + الميترو + الاستوديو'
-  );
+  const official=
+    findTriple(
+      inv,
+      'عدد مراقبة سيناريوهات البنك المركزي + الميترو + الاستوديو'
+    );
 
 
   const unsafe=
@@ -1164,15 +2006,12 @@ function completeSurvey(){
     );
 
 
-  const shops=findTriple(
-    inv,
-    'عدد مراقبة سرقة المنزل + بقالة + مصرف'
-  );
+  const shops=
+    findTriple(
+      inv,
+      'عدد مراقبة سرقة المنزل + بقالة + مصرف'
+    );
 
-
-  /*
-    نظام نقاط السيناريوهات
-  */
 
   let scenario=
 
@@ -1180,11 +2019,17 @@ function completeSurvey(){
 
     +
 
-    official.reduce((a,b)=>a+b,0)*6
+    official.reduce(
+      (a,b)=>a+b,
+      0
+    )*6
 
     +
 
-    jew.reduce((a,b)=>a+b,0)*5
+    jew.reduce(
+      (a,b)=>a+b,
+      0
+    )*5
 
     +
 
@@ -1192,20 +2037,19 @@ function completeSurvey(){
 
     +
 
-    shops.reduce((a,b)=>a+b,0)*3;
+    shops.reduce(
+      (a,b)=>a+b,
+      0
+    )*3;
 
 
-  /* =========================
-     بونص 16 ساعة
-     ========================= */
+  /* بونص 16 ساعة */
 
   if(hours>=16)
     scenario+=50;
 
 
-  /* =========================
-     بونص 400 صورة
-     ========================= */
+  /* بونص 400 صورة */
 
   const imgLine=
 
@@ -1222,7 +2066,8 @@ function completeSurvey(){
     );
 
 
-  const imgCount=num(imgLine);
+  const imgCount=
+    num(imgLine);
 
 
   if(
@@ -1237,27 +2082,14 @@ function completeSurvey(){
      ========================= */
 
   const responsibilityPoints=
-    responsibilityInteractionPoints(resp);
+    responsibilityInteractionPoints(
+      resp
+    );
 
-
-  /*
-    كل ساعة = 30 نقطة
-  */
 
   const hourPoints=
     hours*30;
 
-
-  /*
-    المعادلة النهائية المطلوبة:
-
-    إجمالي البوينتات =
-    نقاط الساعات
-    +
-    نقاط السيناريوهات
-    +
-    نقاط المسؤوليات
-  */
 
   const total=
     hourPoints+
@@ -1265,24 +2097,13 @@ function completeSurvey(){
     responsibilityPoints;
 
 
-  /*
-    التقييم يعتمد على إجمالي البوينتات
-  */
+  const base=
+    rating(total);
 
-  const base=rating(total);
-
-
-  /*
-    تقييم المسؤوليات
-  */
 
   const respRating=
     responsibilityRating(resp);
 
-
-  /*
-    التقييم النهائي
-  */
 
   const final=
     finalRating(
@@ -1292,99 +2113,116 @@ function completeSurvey(){
 
 
   /* =========================
-     تعبئة النتيجة
+     النتيجة
      ========================= */
 
   let out=inv;
 
 
-  out=replaceAny(
-    out,
-    [
-      'اجمالي نقاط السيناريوهات',
-      'إجمالي نقاط السيناريوهات'
-    ],
-    scenario
-  );
+  out=
+    replaceAny(
+      out,
+      [
+        'اجمالي نقاط السيناريوهات',
+        'إجمالي نقاط السيناريوهات'
+      ],
+      scenario
+    );
 
 
-  out=replaceAny(
-    out,
-    [
-      'مجموع البوينتات',
-      'اجمالي البوينتات',
-      'إجمالي البوينتات'
-    ],
-    total
-  );
+  out=
+    replaceAny(
+      out,
+      [
+        'مجموع البوينتات',
+        'اجمالي البوينتات',
+        'إجمالي البوينتات'
+      ],
+      total
+    );
 
 
-  out=replaceAny(
-    out,
-    ['التقييم'],
-    base
-  );
+  out=
+    replaceAny(
+      out,
+      [
+        'التقييم'
+      ],
+      base
+    );
 
 
-  out=replaceAny(
-    out,
-    [
-      'تقيم المسؤوليات',
-      'تقييم المسؤوليات'
-    ],
-    respRating
-  );
+  out=
+    replaceAny(
+      out,
+      [
+        'تقيم المسؤوليات',
+        'تقييم المسؤوليات'
+      ],
+      respRating
+    );
 
 
-  out=replaceAny(
-    out,
-    [
-      'التقيم النهائي',
-      'التقييم النهائي'
-    ],
-    final
-  );
+  out=
+    replaceAny(
+      out,
+      [
+        'التقيم النهائي',
+        'التقييم النهائي'
+      ],
+      final
+    );
 
 
-  document.getElementById('output').value=out;
+  document
+    .getElementById(
+      'output'
+    )
+    .value=out;
 
 
-  document.getElementById('status3').textContent=
+  document
+    .getElementById(
+      'status3'
+    )
+    .textContent=
 
-    '✅ تم إكمال الاستبيان. '+
+      '✅ تم إكمال الاستبيان. '+
 
-    'الساعات: '+
-    hours+
-    ' ساعة = '+
-    hourPoints+
-    ' نقطة | '+
+      'الساعات: '+
+      hours+
+      ' ساعة = '+
+      hourPoints+
+      ' نقطة | '+
 
-    'نقاط السيناريوهات: '+
-    scenario+
-    ' نقطة | '+
+      'نقاط السيناريوهات: '+
+      scenario+
+      ' نقطة | '+
 
-    'نقاط المسؤوليات: '+
-    responsibilityPoints+
-    ' نقطة | '+
+      'نقاط المسؤوليات: '+
+      responsibilityPoints+
+      ' نقطة | '+
 
-    'إجمالي البوينتات: '+
-    total+
-    ' نقطة | '+
+      'إجمالي البوينتات: '+
+      total+
+      ' نقطة | '+
 
-    'التقييم: '+
-    base+
-    ' | '+
+      'التقييم: '+
+      base+
+      ' | '+
 
-    'تقييم المسؤوليات: '+
-    respRating+
-    ' | '+
+      'تقييم المسؤوليات: '+
+      respRating+
+      ' | '+
 
-    'التقييم النهائي: '+
-    final+
-    '.';
+      'التقييم النهائي: '+
+      final+
+      '.';
+
 }
 
 </script>
 
 </body>
 </html>
+```
