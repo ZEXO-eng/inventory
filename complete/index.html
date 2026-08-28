@@ -813,7 +813,7 @@ function getMentionIds(text){
    التحقق من حالة العضو
    ========================= */
 
-function getSpecialFinalRating(text){
+function getSpecialFinalRating(text,naturalFinal){
 
   const memberId=
     getMemberId(text);
@@ -843,7 +843,7 @@ function getSpecialFinalRating(text){
 
 
   /*
-    خارج الخدمة النهائية له الأولوية
+    خارج الخدمة الإدراية له الأولوية
   */
 
   if(
@@ -856,16 +856,32 @@ function getSpecialFinalRating(text){
 
 
   /*
-    العضو الجديد لا يأخذ "جديد"
-    إلا إذا كان تقييمه النهائي سيء.
-    التقييمات الأعلى تبقى كما هي.
+    العضو الجديد:
+    يظهر "جديد" فقط إذا كان
+    تقييمه النهائي سيء.
+
+    إذا كان:
+    جيد جداً
+    ممتاز
+    ممتاز جداً
+
+    يبقى تقييمه الطبيعي.
   */
 
   if(
     newIds.includes(memberId)
   ){
 
-    return 'جديد';
+    if(
+      naturalFinal === 'سيء' ||
+      naturalFinal === 'سيئ'
+    ){
+
+      return 'جديد';
+
+    }
+
+    return null;
 
   }
 
@@ -873,6 +889,7 @@ function getSpecialFinalRating(text){
   return null;
 
 }
+
 
 /* =========================
    نظام احتساب التقييم
@@ -893,6 +910,7 @@ function rating(points){
     return 'ممتاز جداً';
 
   return 'غير محدد';
+
 }
 
 
@@ -1016,6 +1034,7 @@ function finalRating(base,respons){
 
 
   return base;
+
 }
 
 
@@ -1301,14 +1320,18 @@ function completeSurvey(){
 
 
     /*
-      التقييم النهائي الخاص:
-      عضو خارج الخدمة = الرتبة المطلوبة
-      عضو جديد = جديد
-      غير ذلك = التقييم الطبيعي
+      التقييم النهائي:
+      خارج الخدمة = الرتبة المطلوبة.
+      العضو الجديد = جديد فقط إذا كان تقييمه سيء.
+      إذا كان جيد جداً أو ممتاز أو ممتاز جداً
+      يبقى تقييمه الطبيعي.
     */
 
     const specialFinal=
-      getSpecialFinalRating(inv);
+      getSpecialFinalRating(
+        inv,
+        base
+      );
 
     const final=
       specialFinal!==null
@@ -1380,6 +1403,7 @@ function completeSurvey(){
         ' نقطة.';
 
     return;
+
   }
 
 
@@ -1469,6 +1493,7 @@ function completeSurvey(){
 
 
       return 0;
+
     }
 
 
@@ -1731,13 +1756,19 @@ function completeSurvey(){
 
   /*
     التقييم الخاص للأعضاء:
-    خارج الخدمة النهائية أو جديد
-    يتغلب فقط على التقييم النهائي.
-    جميع الحسبات السابقة تبقى كما هي.
+    خارج الخدمة = الرتبة المطلوبة.
+    العضو الجديد = جديد فقط إذا كان
+    التقييم النهائي الطبيعي سيء.
+    التقييمات:
+    جيد جداً / ممتاز / ممتاز جداً
+    تبقى كما هي.
   */
 
   const specialFinal=
-    getSpecialFinalRating(inv);
+    getSpecialFinalRating(
+      inv,
+      calculatedFinal
+    );
 
   const final=
     specialFinal!==null
@@ -1856,4 +1887,3 @@ function completeSurvey(){
 
 </body>
 </html>
-
