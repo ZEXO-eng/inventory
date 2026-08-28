@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>نظام معالجة وجرد قسم السيناريو تيم</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#0f172a;color:#e5e7eb;font-family:Tahoma,Arial,sans-serif}
+.wrap{max-width:1200px;margin:0 auto;padding:28px}
+h1{margin:0 0 8px;font-size:28px}
+.sub{color:#94a3b8;margin-bottom:24px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.card{background:#111827;border:1px solid #263244;border-radius:16px;padding:18px;box-shadow:0 8px 30px #0003}
+label{display:block;font-weight:700;margin-bottom:10px}
+textarea{width:100%;min-height:360px;resize:vertical;background:#0b1220;color:#f8fafc;border:1px solid #334155;border-radius:10px;padding:14px;line-height:1.8;font-family:Consolas,Tahoma,monospace;font-size:14px;direction:rtl}
+textarea:focus,input:focus{outline:none;border-color:#2563eb}
+.buttons{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+button{border:0;border-radius:10px;padding:11px 16px;font-weight:700;cursor:pointer;color:white;background:#2563eb}
+button:hover{filter:brightness(1.12)}
+.paste{background:#059669}.clear{background:#dc2626}.copy{background:#7c3aed}
+.main{background:#ea580c;font-size:16px}
+.status{margin-top:10px;min-height:22px;color:#93c5fd;font-size:13px}
+.result{min-height:400px;margin-top:18px}
+.note{font-size:13px;color:#94a3b8;line-height:1.7}
+.author{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:center;margin-bottom:14px}
+.author label{margin:0}
+.author input{width:100%;background:#0b1220;color:#f8fafc;border:1px solid #334155;border-radius:10px;padding:11px 14px;font-family:Tahoma,Arial,sans-serif;font-size:14px}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.stat{background:#0b1220;border:1px solid #334155;border-radius:10px;padding:10px 12px;font-size:13px}
+.stat strong{color:#93c5fd}
+.stat.warn strong{color:#f87171}
+.report{margin-top:18px}
+.report textarea{min-height:220px}
+@media(max-width:850px){.grid{grid-template-columns:1fr}.author{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>📋 نظام معالجة وجرد قسم السيناريو تيم</h1>
+<div class="sub">يعالج استبيانات قسم السيناريو، ينسّق نتيجة الجرد، ويجهّز التقرير الأسبوعي مع الحفاظ على كامل منطق النظام.</div>
+
+<div class="grid">
+  <div class="card">
+    <label>استبيان قسم السيناريو تيم</label>
+    <textarea id="inputData" placeholder="الصق استبيانات قسم السيناريو تيم هنا..."></textarea>
+    <div class="buttons">
+      <button class="paste" onclick="pasteInto('inputData','status1')">📋 لصق الاستبيان هنا</button>
+      <button class="clear" onclick="clearOne('inputData')">مسح</button>
+    </div>
+    <div id="status1" class="status"></div>
+  </div>
+
+  <div class="card">
+    <label>نتيجة الجرد المنسقة</label>
+    <textarea id="outputData" readonly placeholder="ستظهر نتيجة الجرد هنا..."></textarea>
+    <div class="stats">
+      <div class="stat"><strong id="totalCount">إجمالي العدد: 0</strong></div>
+      <div class="stat warn"><strong id="duplicateAlert" style="display:none"></strong><span id="duplicateEmpty">لا توجد IDs مكررة</span></div>
+    </div>
+    <div class="buttons">
+      <button class="copy" onclick="copyResult('outputData')">📄 نسخ الجرد</button>
+    </div>
+  </div>
+</div>
+
+<div class="card result">
+  <div class="author">
+    <label for="authorName">منشئ التقرير (اسمك/المنشن)</label>
+    <input type="text" id="authorName" placeholder="أدخل اسمك..." oninput="processData()">
+  </div>
+  <label>نموذج التقرير الأسبوعي</label>
+  <textarea id="reportData" readonly placeholder="سيظهر التقرير الأسبوعي هنا..."></textarea>
+  <div class="buttons">
+    <button class="main" onclick="processData()">✅ معالجة وتحديث</button>
+    <button class="copy" onclick="copyResult('reportData')">📄 نسخ التقرير الأسبوعي</button>
+    <button class="clear" onclick="clearAll()">🗑️ مسح الكل</button>
+  </div>
+  <div id="status3" class="status"></div>
+  <div class="note">يتم اكتشاف التكرارات تلقائياً، وتبقى قواعد التقييم والإجازات والرتب والتقرير الأسبوعي كما هي في النظام الأصلي.</div>
+</div>
+</div>
+<div id="toast" class="status" style="position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#059669;color:white;padding:10px 18px;border-radius:10px;display:none;z-index:10">✅ تم النسخ بنجاح!</div>
+
+<script>
+function pasteInto(id,statusId){
+  const box=document.getElementById(id), status=document.getElementById(statusId);
+  navigator.clipboard.readText().then(text=>{
+    if(!text){status.textContent='⚠️ الحافظة فارغة.';return;}
+    box.value=text; box.dispatchEvent(new Event('input',{bubbles:true})); status.textContent='✅ تم اللصق من الحافظة.';
+  }).catch(()=>{box.focus();status.textContent='⚠️ المتصفح منع القراءة المباشرة للحافظة. اضغط Ctrl+V هنا للسماح باللصق.';});
+}
+function clearOne(id){document.getElementById(id).value=''; if(id==='inputData') processData();}
+function clearAll(){
+  document.getElementById('inputData').value='';
+  document.getElementById('outputData').value='';
+  document.getElementById('reportData').value='';
+  document.getElementById('authorName').value='';
+  document.getElementById('totalCount').textContent='إجمالي العدد: 0';
+  document.getElementById('duplicateAlert').style.display='none';
+  document.getElementById('duplicateEmpty').style.display='inline';
+  document.getElementById('status1').textContent='';
+  document.getElementById('status3').textContent='';
+}
+async function copyResult(elementId){
+  const output=document.getElementById(elementId); if(!output.value)return;
+  try{await navigator.clipboard.writeText(output.value);}catch(e){output.focus();output.select();document.execCommand('copy');}
+  const toast=document.getElementById('toast'); toast.style.display='block'; setTimeout(()=>toast.style.display='none',2000);
+}
+</script>
+<script>
+function removeFancyFont(text) {
+      if (!text) return '';
+      let str = text.normalize('NFKD');
+      let clean = '';
+      for (let i = 0; i < str.length; i++) {
+        let code = str.charCodeAt(i);
+        if (code >= 0xD835) {
+          let codePoint = str.codePointAt(i);
+          if (codePoint >= 0x1D400 && codePoint <= 0x1D419) clean += String.fromCharCode(65 + (codePoint - 0x1D400));
+          else if (codePoint >= 0x1D41A && codePoint <= 0x1D433) clean += String.fromCharCode(97 + (codePoint - 0x1D41A));
+          else if (codePoint >= 0x1D434 && codePoint <= 0x1D44D) clean += String.fromCharCode(65 + (codePoint - 0x1D434));
+          else if (codePoint >= 0x1D44E && codePoint <= 0x1D467) clean += String.fromCharCode(97 + (codePoint - 0x1D44E));
+          else if (codePoint >= 0x1D468 && codePoint <= 0x1D481) clean += String.fromCharCode(65 + (codePoint - 0x1D468));
+          else if (codePoint >= 0x1D482 && codePoint <= 0x1D49B) clean += String.fromCharCode(97 + (codePoint - 0x1D482));
+          else if (codePoint >= 0x1D5D4 && codePoint <= 0x1D5ED) clean += String.fromCharCode(65 + (codePoint - 0x1D5D4));
+          else if (codePoint >= 0x1D5EE && codePoint <= 0x1D607) clean += String.fromCharCode(97 + (codePoint - 0x1D5EE));
+          else if (codePoint >= 0x1D608 && codePoint <= 0x1D621) clean += String.fromCharCode(65 + (codePoint - 0x1D608));
+          else if (codePoint >= 0x1D622 && codePoint <= 0x1D63B) clean += String.fromCharCode(97 + (codePoint - 0x1D622));
+          else if (codePoint >= 0x1D63C && codePoint <= 0x1D655) clean += String.fromCharCode(65 + (codePoint - 0x1D63C));
+          else if (codePoint >= 0x1D656 && codePoint <= 0x1D66F) clean += String.fromCharCode(97 + (codePoint - 0x1D656));
+          i++;
+        } else {
+          clean += str[i];
+        }
+      }
+      return clean.replace(/[\u0300-\u036f]/g, '').trim();
+    }
+
+    function cleanAndStandardizeRank(rawRank) {
+      if (!rawRank) return '';
+      let clean = removeFancyFont(rawRank);
+      const standardRanks = [
+        "Supervisor", "Mod", "Super Admin", "Head Admin", "Admin",
+        "Controller", "Hand of the king", "Pre Master", "Master", "Advisor",
+        "Operator", "Marshal", "Manager", "Director", "Executive",
+        "President", "Commander", "Mythical", "Colonel", "Boss",
+        "Big Boss", "CEO", "Co Founder", "Founder", "Consultant"
+      ];
+      const lowerClean = clean.toLowerCase();
+      for (let rank of standardRanks) {
+        if (lowerClean.includes(rank.toLowerCase())) return rank;
+      }
+      return clean;
+    }
+
+    function formatUserMention(rawInput) {
+      if (!rawInput) return '';
+      const digitMatch = rawInput.match(/\d{17,20}/);
+      if (digitMatch) return `<@${digitMatch[0]}>`;
+      let clean = rawInput.replace(/[\u200B-\u200D\uFEFF\u200F]/g, '').replace(/@+/g, '').trim();
+      return `<@${clean}>`;
+    }
+
+    function processData() {
+      const input = document.getElementById('inputData').value;
+      const totalCountElem = document.getElementById('totalCount');
+      const duplicateAlertElem = document.getElementById('duplicateAlert');
+      const authorName = document.getElementById('authorName').value.trim();
+
+      if (!input.trim()) {
+        document.getElementById('outputData').value = '';
+        document.getElementById('reportData').value = '';
+        totalCountElem.textContent = 'إجمالي العدد: 0';
+        duplicateAlertElem.style.display = 'none';
+        return;
+      }
+
+      const lineSeparator = '`-----------------------------------------------------`';
+      let result = `${lineSeparator}\n`;
+      let processedCount = 0;
+      let idTracker = {};
+
+      let countNew = 0;
+      let countOut = 0;
+      let countBad = 0;
+      let countActive = 0;
+
+      // التقسيم الصارم فقط عند كلمة "منشن الشخص"
+      const entries = input.split(/(?=منشن الشخص\s*:)/g);
+
+      entries.forEach((entry) => {
+        if (!entry.trim() || !entry.includes('منشن الشخص')) return;
+
+        let data = { userMention: '', rank: '', finalEval: '' };
+        const lines = entry.split(/\r?\n/);
+
+        lines.forEach(line => {
+          if (!line.includes(':')) return;
+          const parts = line.split(':');
+          const key = parts[0].trim();
+          const val = parts.slice(1).join(':').trim();
+
+          // المطابقة الدقيقة للمفاتيح المطلوبة فقط
+          if (key === 'منشن الشخص') {
+            data.userMention = val;
+          } else if (key === 'الرتبة الادارية' || key === 'الرتبة  الادارية' || key.includes('الرتبة')) {
+            data.rank = val;
+          } else if (key === 'التقيم النهائي' || key === 'التقييم النهائي') {
+            data.finalEval = val;
+          }
+        });
+
+        // التأكد من استخراج منشن الشخص
+        if (data.userMention) {
+          processedCount++;
+          
+          let rawKey = data.userMention.replace(/[^0-9]/g, '');
+          if (rawKey && rawKey.length >= 17) idTracker[rawKey] = (idTracker[rawKey] || 0) + 1;
+
+          const cleanRank = cleanAndStandardizeRank(data.rank);
+          const evalText = (data.finalEval || '').trim();
+          const matchedOutRoleMention = evalText.match(/<@&\d{17,20}>/);
+          const hasOutByKeyword = evalText.includes('خارج خدمة') || evalText.includes('خارج الخدمة') || evalText.includes('إجازة');
+          const hasOutByRoleMention = /<@&\d{17,20}>/.test(evalText);
+          const hasOutByConfiguredRole = evalText.includes(OUT_OF_SERVICE_ROLE_ID) || evalText.includes(OUT_OF_SERVICE_ROLE_MENTION);
+          const isOutOfService = hasOutByKeyword || hasOutByRoleMention || hasOutByConfiguredRole;
+          let finalRating = data.finalEval || 'سيء';
+
+          if (finalRating.includes('جديد')) {
+            countNew++;
+          } else if (isOutOfService) {
+            countOut++;
+            finalRating = matchedOutRoleMention ? matchedOutRoleMention[0] : OUT_OF_SERVICE_ROLE_MENTION;
+          } else if (finalRating.includes('سيء') || finalRating.includes('سئ')) {
+            countBad++;
+          } else if (['جيد جدا', 'ممتاز', 'ممتاز جدا'].some(r => finalRating.includes(r))) {
+            countActive++;
+          }
+
+          let formattedMention = formatUserMention(data.userMention);
+          result += `${formattedMention}\nالتقييم : ${finalRating}\nالرتبة الادارية : ${cleanRank}\n${lineSeparator}\n`;
+        }
+      });
+
+      document.getElementById('outputData').value = result;
+      totalCountElem.textContent = `إجمالي العدد: ${processedCount}`;
+
+      const weeklyReport = `** كم العدد حالي بالقسم: ${processedCount}\n\n` +
+        `كم عدد ماخذين اجازة : ${countOut} ( ${countNew}جديد)\n\n` +
+        `عدد غير متفاعلين : ${countBad}\n\n` +
+        `عدد المتفاعلين بالقسم : ${countActive}\n` +
+        `هل يوجد ملاحظة بالقسم او حاب تطور شي من جميع نواحي : لايوجد يعطيكم العافية   \n\n` +
+        `تم انشاء التقرير من قبل : ( ${authorName} ) **`;
+
+      document.getElementById('reportData').value = weeklyReport;
+
+      let duplicates = Object.keys(idTracker).filter(key => idTracker[key] > 1);
+      if (duplicates.length > 0) {
+        duplicateAlertElem.style.display = 'block';
+        duplicateAlertElem.innerHTML = `⚠️ تنبيه: يوجد IDs مكررة: <br>${duplicates.map(d => `- ${d} (تكرر ${idTracker[d]} مرات)`).join('<br>')}`;
+      } else {
+        duplicateAlertElem.style.display = 'none';
+      }
+    }
+
+    
+
+const _originalProcessData = processData;
+processData = function(){ _originalProcessData(); const d=document.getElementById('duplicateAlert'); const e=document.getElementById('duplicateEmpty'); if(d.style.display==='block'){e.style.display='none';}else{e.style.display='inline';} };
+document.getElementById('inputData').addEventListener('input',processData);
+
+</script>
+</body>
+</html>
