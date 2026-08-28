@@ -1,115 +1,191 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>نظام معالجة وجرد قسم السيناريو تيم</title>
-<style>
-*{box-sizing:border-box}
-body{margin:0;background:#0f172a;color:#e5e7eb;font-family:Tahoma,Arial,sans-serif}
-.wrap{max-width:1200px;margin:0 auto;padding:28px}
-h1{margin:0 0 8px;font-size:28px}
-.sub{color:#94a3b8;margin-bottom:24px}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
-.card{background:#111827;border:1px solid #263244;border-radius:16px;padding:18px;box-shadow:0 8px 30px #0003}
-label{display:block;font-weight:700;margin-bottom:10px}
-textarea{width:100%;min-height:360px;resize:vertical;background:#0b1220;color:#f8fafc;border:1px solid #334155;border-radius:10px;padding:14px;line-height:1.8;font-family:Consolas,Tahoma,monospace;font-size:14px;direction:rtl}
-textarea:focus,input:focus{outline:none;border-color:#2563eb}
-.buttons{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
-button{border:0;border-radius:10px;padding:11px 16px;font-weight:700;cursor:pointer;color:white;background:#2563eb}
-button:hover{filter:brightness(1.12)}
-.paste{background:#059669}.clear{background:#dc2626}.copy{background:#7c3aed}
-.main{background:#ea580c;font-size:16px}
-.status{margin-top:10px;min-height:22px;color:#93c5fd;font-size:13px}
-.result{min-height:400px;margin-top:18px}
-.note{font-size:13px;color:#94a3b8;line-height:1.7}
-.author{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:center;margin-bottom:14px}
-.author label{margin:0}
-.author input{width:100%;background:#0b1220;color:#f8fafc;border:1px solid #334155;border-radius:10px;padding:11px 14px;font-family:Tahoma,Arial,sans-serif;font-size:14px}
-.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
-.stat{background:#0b1220;border:1px solid #334155;border-radius:10px;padding:10px 12px;font-size:13px}
-.stat strong{color:#93c5fd}
-.stat.warn strong{color:#f87171}
-.report{margin-top:18px}
-.report textarea{min-height:220px}
-@media(max-width:850px){.grid{grid-template-columns:1fr}.author{grid-template-columns:1fr}}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>نظام جرد تقارير قسم السيناريو تيم</title>
+  <style>
+    :root {
+      --bg-dark: #0f172a;
+      --card-bg: #1e293b;
+      --accent: #3b82f6;
+      --accent-hover: #2563eb;
+      --text-main: #f8fafc;
+      --text-sub: #94a3b8;
+      --border: #334155;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      padding: 30px 20px;
+      min-height: 100vh;
+    }
+
+    .wrapper { max-width: 1200px; margin: 0 auto; }
+    header { text-align: center; margin-bottom: 25px; }
+    header h1 { font-size: 1.8rem; color: #60a5fa; margin-bottom: 8px; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    @media (max-width: 768px) { .grid { grid-template-columns: 1fr; } }
+
+    .box {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 15px;
+      display: flex;
+      flex-direction: column;
+    }
+    .box label {
+      font-size: 0.9rem;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: var(--text-sub);
+    }
+    textarea {
+      width: 100%;
+      height: 380px;
+      background: #0f172a;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px;
+      color: var(--text-main);
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      resize: none;
+      outline: none;
+      direction: ltr;
+      text-align: left;
+    }
+    textarea:focus { border-color: var(--accent); }
+
+    .full-width-box { margin-top: 20px; }
+    .full-width-box textarea { height: 220px; }
+
+    .input-author {
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .input-author input {
+      background: #0f172a;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 8px 12px;
+      color: var(--text-main);
+      outline: none;
+      font-size: 0.9rem;
+      flex: 1;
+    }
+    .input-author input:focus { border-color: var(--accent); }
+
+    .stats-bar {
+      margin-top: 15px;
+      background: #0f172a;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 15px;
+      font-size: 0.9rem;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+    .stats-count { color: #60a5fa; font-weight: bold; }
+    .stats-duplicates { color: #f87171; font-weight: bold; }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    button.action-btn {
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    button.secondary {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-sub);
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: #10b981;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      opacity: 0;
+      transition: all 0.3s ease;
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+  </style>
 </head>
 <body>
-<div class="wrap">
-<h1>📋 نظام معالجة وجرد قسم السيناريو تيم</h1>
-<div class="sub">يعالج استبيانات قسم السيناريو، ينسّق نتيجة الجرد، ويجهّز التقرير الأسبوعي مع الحفاظ على كامل منطق النظام.</div>
 
-<div class="grid">
-  <div class="card">
-    <label>استبيان قسم السيناريو تيم</label>
-    <textarea id="inputData" placeholder="الصق استبيانات قسم السيناريو تيم هنا..."></textarea>
-    <div class="buttons">
-      <button class="paste" onclick="pasteInto('inputData','status1')">📋 لصق الاستبيان هنا</button>
-      <button class="clear" onclick="clearOne('inputData')">مسح</button>
+  <div class="wrapper">
+    <header>
+      <h1>نظام معالجة وجرد قسم السيناريو تيم</h1>
+    </header>
+
+    <div class="grid">
+      <div class="box">
+        <label>1. المدخلات (استبيانات السيناريو):</label>
+        <textarea id="inputData" placeholder="الصق استبيانات قسم السيناريو تيم هنا..."></textarea>
+      </div>
+      <div class="box">
+        <label>2. المخرجات (نتيجة الجرد المنسقة):</label>
+        <textarea id="outputData" placeholder="ستظهر النتيجة هنا..." readonly></textarea>
+        <div class="stats-bar">
+          <div id="totalCount" class="stats-count">إجمالي العدد: 0</div>
+          <div id="duplicateAlert" class="stats-duplicates" style="display: none;"></div>
+        </div>
+      </div>
     </div>
-    <div id="status1" class="status"></div>
-  </div>
 
-  <div class="card">
-    <label>نتيجة الجرد المنسقة</label>
-    <textarea id="outputData" readonly placeholder="ستظهر نتيجة الجرد هنا..."></textarea>
-    <div class="stats">
-      <div class="stat"><strong id="totalCount">إجمالي العدد: 0</strong></div>
-      <div class="stat warn"><strong id="duplicateAlert" style="display:none"></strong><span id="duplicateEmpty">لا توجد IDs مكررة</span></div>
+    <div class="box full-width-box">
+      <div class="input-author">
+        <label style="margin: 0; min-width: 140px;">منشئ التقرير (اسمك/المنشن):</label>
+        <input type="text" id="authorName" placeholder="أدخل اسمك..." oninput="processData()">
+      </div>
+      <label>3. نموذج التقرير الأسبوعي (جاهز للنسخ):</label>
+      <textarea id="reportData" readonly></textarea>
     </div>
-    <div class="buttons">
-      <button class="copy" onclick="copyResult('outputData')">📄 نسخ الجرد</button>
+
+    <div class="actions">
+      <button class="action-btn" onclick="processData()">معالجة وتحديث</button>
+      <button class="action-btn secondary" onclick="copyResult('outputData')">نسخ الجرد</button>
+      <button class="action-btn secondary" onclick="copyResult('reportData')">نسخ التقرير الأسبوعي</button>
+      <button class="action-btn secondary" onclick="clearAll()">مسح الكل</button>
     </div>
   </div>
-</div>
 
-<div class="card result">
-  <div class="author">
-    <label for="authorName">منشئ التقرير (اسمك/المنشن)</label>
-    <input type="text" id="authorName" placeholder="أدخل اسمك..." oninput="processData()">
-  </div>
-  <label>نموذج التقرير الأسبوعي</label>
-  <textarea id="reportData" readonly placeholder="سيظهر التقرير الأسبوعي هنا..."></textarea>
-  <div class="buttons">
-    <button class="main" onclick="processData()">✅ معالجة وتحديث</button>
-    <button class="copy" onclick="copyResult('reportData')">📄 نسخ التقرير الأسبوعي</button>
-    <button class="clear" onclick="clearAll()">🗑️ مسح الكل</button>
-  </div>
-  <div id="status3" class="status"></div>
-  <div class="note">يتم اكتشاف التكرارات تلقائياً، وتبقى قواعد التقييم والإجازات والرتب والتقرير الأسبوعي كما هي في النظام الأصلي.</div>
-</div>
-</div>
-<div id="toast" class="status" style="position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#059669;color:white;padding:10px 18px;border-radius:10px;display:none;z-index:10">✅ تم النسخ بنجاح!</div>
+  <div id="toast" class="toast">تم النسخ بنجاح!</div>
 
-<script>
-function pasteInto(id,statusId){
-  const box=document.getElementById(id), status=document.getElementById(statusId);
-  navigator.clipboard.readText().then(text=>{
-    if(!text){status.textContent='⚠️ الحافظة فارغة.';return;}
-    box.value=text; box.dispatchEvent(new Event('input',{bubbles:true})); status.textContent='✅ تم اللصق من الحافظة.';
-  }).catch(()=>{box.focus();status.textContent='⚠️ المتصفح منع القراءة المباشرة للحافظة. اضغط Ctrl+V هنا للسماح باللصق.';});
-}
-function clearOne(id){document.getElementById(id).value=''; if(id==='inputData') processData();}
-function clearAll(){
-  document.getElementById('inputData').value='';
-  document.getElementById('outputData').value='';
-  document.getElementById('reportData').value='';
-  document.getElementById('authorName').value='';
-  document.getElementById('totalCount').textContent='إجمالي العدد: 0';
-  document.getElementById('duplicateAlert').style.display='none';
-  document.getElementById('duplicateEmpty').style.display='inline';
-  document.getElementById('status1').textContent='';
-  document.getElementById('status3').textContent='';
-}
-async function copyResult(elementId){
-  const output=document.getElementById(elementId); if(!output.value)return;
-  try{await navigator.clipboard.writeText(output.value);}catch(e){output.focus();output.select();document.execCommand('copy');}
-  const toast=document.getElementById('toast'); toast.style.display='block'; setTimeout(()=>toast.style.display='none',2000);
-}
-</script>
-<script>
-function removeFancyFont(text) {
+  <script>
+    const OUT_OF_SERVICE_ROLE_ID = "1480638365937434808";
+    const OUT_OF_SERVICE_ROLE_MENTION = `<@&${OUT_OF_SERVICE_ROLE_ID}>`;
+
+    function removeFancyFont(text) {
       if (!text) return '';
       let str = text.normalize('NFKD');
       let clean = '';
@@ -264,12 +340,30 @@ function removeFancyFont(text) {
       }
     }
 
-    
+    function copyResult(elementId) {
+      const output = document.getElementById(elementId);
+      if (!output.value) return;
+      output.select();
+      navigator.clipboard.writeText(output.value);
+      showToast();
+    }
 
-const _originalProcessData = processData;
-processData = function(){ _originalProcessData(); const d=document.getElementById('duplicateAlert'); const e=document.getElementById('duplicateEmpty'); if(d.style.display==='block'){e.style.display='none';}else{e.style.display='inline';} };
-document.getElementById('inputData').addEventListener('input',processData);
+    function clearAll() {
+      document.getElementById('inputData').value = '';
+      document.getElementById('outputData').value = '';
+      document.getElementById('reportData').value = '';
+      document.getElementById('authorName').value = '';
+      document.getElementById('totalCount').textContent = 'إجمالي العدد: 0';
+      document.getElementById('duplicateAlert').style.display = 'none';
+    }
 
-</script>
+    function showToast() {
+      const toast = document.getElementById('toast');
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2000);
+    }
+
+    document.getElementById('inputData').addEventListener('input', processData);
+  </script>
 </body>
 </html>
