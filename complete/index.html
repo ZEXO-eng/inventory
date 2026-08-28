@@ -1,25 +1,26 @@
 <!DOCTYPE html>
+
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>نقل الجرد | نظام الجرد</title>
+<title>مُكمل استبيانات جرد المسؤولين</title>
 
 <style>
 *{box-sizing:border-box}
 
 :root{
-  --bg:#070b14;
-  --panel:#0d1422;
-  --panel2:#111a2b;
-  --line:#26334a;
+  --bg:#050816;
+  --panel:rgba(13,20,34,.72);
+  --panel2:rgba(17,26,43,.62);
+  --line:rgba(148,163,184,.16);
   --text:#f8fafc;
   --muted:#8fa0b8;
   --blue:#3b82f6;
   --blue2:#2563eb;
+  --cyan:#06b6d4;
   --orange:#f97316;
   --green:#10b981;
-  --red:#ef4444;
 }
 
 html,body{
@@ -27,226 +28,155 @@ html,body{
   min-height:100%;
   font-family:Tahoma,Arial,sans-serif;
   background:
-    radial-gradient(circle at 15% 10%,#1d4ed833,transparent 30%),
-    radial-gradient(circle at 85% 20%,#f9731620,transparent 28%),
-    linear-gradient(135deg,#070b14,#0b1120 55%,#080d18);
+    radial-gradient(circle at 12% 8%,#2563eb35,transparent 30%),
+    radial-gradient(circle at 88% 18%,#06b6d425,transparent 27%),
+    radial-gradient(circle at 50% 100%,#6366f120,transparent 35%),
+    linear-gradient(135deg,#050816,#0a1020 55%,#060b16);
   color:var(--text);
 }
 
 body{
   min-height:100vh;
   overflow-x:hidden;
+  position:relative;
 }
 
-.bg-orb{
+body::before,
+body::after{
+  content:"";
   position:fixed;
   border-radius:50%;
-  filter:blur(80px);
+  filter:blur(85px);
   pointer-events:none;
-  opacity:.25;
+  opacity:.2;
+  z-index:0;
 }
 
-.orb1{
+body::before{
+  width:300px;
+  height:300px;
+  background:#2563eb;
+  top:-120px;
+  right:-90px;
+}
+
+body::after{
   width:260px;
   height:260px;
-  background:#2563eb;
-  top:-100px;
-  right:-80px;
-}
-
-.orb2{
-  width:220px;
-  height:220px;
-  background:#f97316;
-  bottom:-100px;
-  left:-70px;
+  background:#06b6d4;
+  bottom:-120px;
+  left:-80px;
 }
 
 .wrap{
   width:min(1180px,calc(100% - 36px));
-  margin:auto;
-  padding:30px 0 28px;
+  margin:0 auto;
+  padding:34px 0 30px;
   position:relative;
-}
-
-.topbar{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:20px;
-  margin-bottom:42px;
-}
-
-.brand{
-  display:flex;
-  align-items:center;
-  gap:12px;
-}
-
-.brand-icon{
-  width:46px;
-  height:46px;
-  border:1px solid #ffffff18;
-  border-radius:15px;
-  display:grid;
-  place-items:center;
-  background:#ffffff08;
-  box-shadow:0 10px 30px #0004;
-  font-size:22px;
-}
-
-.brand b{
-  font-size:15px;
-}
-
-.brand span{
-  display:block;
-  color:var(--muted);
-  font-size:12px;
-  margin-top:4px;
-}
-
-.badge{
-  padding:8px 13px;
-  border:1px solid #ffffff12;
-  border-radius:999px;
-  color:#a9bad1;
-  background:#ffffff06;
-  font-size:12px;
-}
-
-.hero{
-  text-align:center;
-  max-width:850px;
-  margin:0 auto 32px;
-}
-
-.eyebrow{
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
-  color:#fed7aa;
-  background:#f9731616;
-  border:1px solid #f9731633;
-  border-radius:999px;
-  padding:8px 13px;
-  font-size:12px;
-  font-weight:700;
-  margin-bottom:18px;
-}
-
-.dot{
-  width:7px;
-  height:7px;
-  border-radius:50%;
-  background:#fb923c;
-  box-shadow:0 0 15px #fb923c;
+  z-index:1;
 }
 
 h1{
-  font-size:clamp(32px,5vw,52px);
-  line-height:1.1;
-  margin:0 0 14px;
-  letter-spacing:-1.5px;
-}
-
-h1 span{
-  background:linear-gradient(90deg,#93c5fd,#fff,#fdba74);
+  margin:0 0 10px;
+  font-size:clamp(30px,5vw,46px);
+  letter-spacing:-1px;
+  background:linear-gradient(90deg,#93c5fd,#fff,#67e8f9);
   -webkit-background-clip:text;
   background-clip:text;
   color:transparent;
 }
 
-.hero p{
-  margin:0;
+.sub{
   color:var(--muted);
-  font-size:15px;
-  line-height:1.9;
+  margin-bottom:28px;
+  font-size:13px;
+  line-height:1.8;
+}
+
+.wrap > h1,
+.wrap > .sub{
+  text-align:center;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:20px;
 }
 
 .card{
+  position:relative;
+  background:
+    linear-gradient(145deg,rgba(17,27,48,.82),rgba(8,15,29,.68));
   border:1px solid var(--line);
   border-radius:22px;
-  background:linear-gradient(145deg,#111a2beF,#0b1220E8);
-  box-shadow:0 25px 70px #0006;
-  padding:22px;
-  position:relative;
+  padding:19px;
+  box-shadow:
+    0 25px 70px rgba(0,0,0,.4),
+    inset 0 1px 0 rgba(255,255,255,.045);
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
   overflow:hidden;
 }
 
-.card:before{
+.card::before{
   content:"";
   position:absolute;
-  inset:-1px;
-  background:radial-gradient(
-    circle at 90% 0%,
-    #f9731620,
-    transparent 38%
-  );
+  width:190px;
+  height:190px;
+  top:-90px;
+  right:-70px;
+  border-radius:50%;
+  background:#2563eb18;
+  filter:blur(35px);
   pointer-events:none;
 }
 
-.card-title{
+.card label{
+  display:block;
+  font-weight:800;
+  margin-bottom:11px;
+  font-size:13px;
+  color:#cbd5e1;
   position:relative;
-  display:flex;
-  align-items:center;
-  gap:12px;
-  margin-bottom:15px;
-}
-
-.card-icon{
-  width:44px;
-  height:44px;
-  border-radius:13px;
-  display:grid;
-  place-items:center;
-  background:#ffffff08;
-  border:1px solid #ffffff12;
-  font-size:21px;
-}
-
-.card-title h2{
-  margin:0;
-  font-size:18px;
-}
-
-.card-title p{
-  margin:4px 0 0;
-  color:var(--muted);
-  font-size:11px;
+  z-index:1;
 }
 
 textarea{
   width:100%;
   min-height:360px;
   resize:vertical;
-  background:#080e1a;
+  background:
+    linear-gradient(145deg,rgba(3,9,22,.82),rgba(10,18,34,.72));
   color:#f8fafc;
-  border:1px solid #26334a;
-  border-radius:14px;
-  padding:15px;
+  border:1px solid rgba(148,163,184,.15);
+  border-radius:15px;
+  padding:14px;
   line-height:1.8;
   font-family:Consolas,Tahoma,monospace;
   font-size:14px;
   direction:rtl;
   outline:none;
-  transition:.2s;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.025),
+    0 10px 30px rgba(0,0,0,.18);
+  transition:.25s ease;
+  position:relative;
+  z-index:1;
+}
+
+textarea::placeholder{
+  color:#64748b;
 }
 
 textarea:focus{
-  border-color:#3b82f6;
-  box-shadow:0 0 0 3px #3b82f615;
+  border-color:rgba(59,130,246,.65);
+  box-shadow:
+    0 0 0 3px rgba(59,130,246,.09),
+    0 15px 40px rgba(0,0,0,.25);
 }
 
-textarea[readonly]{
-  background:#080d17;
-}
-
-.input-card{
-  margin-bottom:18px;
-}
-
-.controls{
+.buttons{
   display:flex;
   gap:10px;
   flex-wrap:wrap;
@@ -254,13 +184,13 @@ textarea[readonly]{
 }
 
 button{
-  border:0;
+  border:1px solid rgba(255,255,255,.08);
   border-radius:11px;
   padding:11px 17px;
   font-weight:700;
   cursor:pointer;
   color:white;
-  transition:.2s;
+  transition:.22s ease;
 }
 
 button:hover{
@@ -268,500 +198,276 @@ button:hover{
   filter:brightness(1.08);
 }
 
-.primary{
-  background:linear-gradient(135deg,#3b82f6,#2563eb);
+.paste{
+  background:linear-gradient(135deg,#059669,#047857);
+  box-shadow:0 10px 28px rgba(5,150,105,.18);
 }
 
-.orange{
-  background:linear-gradient(135deg,#fb923c,#ea580c);
+.clear{
+  background:rgba(220,38,38,.82);
+  box-shadow:0 10px 28px rgba(220,38,38,.13);
 }
 
-.green{
-  background:linear-gradient(135deg,#10b981,#059669);
+.copy{
+  background:linear-gradient(135deg,#7c3aed,#6d28d9);
+  box-shadow:0 10px 28px rgba(124,58,237,.18);
 }
 
-.red{
-  background:linear-gradient(135deg,#ef4444,#dc2626);
-}
-
-.dark{
-  background:#172235;
-  border:1px solid #334155;
+.main{
+  background:linear-gradient(135deg,#f97316,#ea580c);
+  font-size:15px;
+  box-shadow:0 10px 30px rgba(249,115,22,.2);
 }
 
 .status{
+  margin-top:11px;
   min-height:22px;
-  margin-top:10px;
   color:#93c5fd;
-  font-size:12px;
+  font-size:13px;
+  line-height:1.7;
 }
 
-.stats{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:10px;
-  margin-top:15px;
+.result{
+  min-height:400px;
+  margin-top:20px;
 }
 
-.stat{
-  background:#ffffff05;
-  border:1px solid #ffffff0d;
-  border-radius:13px;
-  padding:13px;
-  text-align:center;
-}
-
-.stat b{
-  display:block;
-  font-size:20px;
-  margin-bottom:5px;
-}
-
-.stat span{
-  color:var(--muted);
-  font-size:11px;
-}
-
-.result-card{
-  margin-top:18px;
-}
-
-.result-head{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:15px;
-  margin-bottom:15px;
-}
-
-.result-head h2{
-  margin:0;
-  font-size:18px;
-}
-
-.result-badge{
-  padding:7px 11px;
-  border-radius:999px;
-  background:#10b98115;
-  border:1px solid #10b98130;
-  color:#6ee7b7;
-  font-size:11px;
-  font-weight:bold;
+.result textarea{
+  min-height:400px;
 }
 
 .note{
-  margin-top:13px;
-  color:#71829a;
-  font-size:11px;
-  line-height:1.8;
-}
-
-.footer{
-  text-align:center;
-  color:#64748b;
-  font-size:11px;
-  margin-top:25px;
-}
-
-.toast{
-  position:fixed;
-  bottom:25px;
-  left:50%;
-  transform:translate(-50%,120px);
-  background:#10b981;
-  color:white;
-  padding:12px 20px;
+  margin-top:16px;
+  padding:12px 14px;
   border-radius:12px;
+  background:rgba(255,255,255,.035);
+  border:1px solid rgba(148,163,184,.11);
   font-size:12px;
-  font-weight:bold;
-  opacity:0;
-  transition:.3s;
-  z-index:50;
-  box-shadow:0 15px 40px #0007;
+  color:#94a3b8;
+  line-height:1.9;
 }
 
-.toast.show{
-  transform:translate(-50%,0);
-  opacity:1;
+@media(max-width:850px){
+  .grid{
+    grid-template-columns:1fr;
+  }
 }
 
-@media(max-width:800px){
+@media(max-width:600px){
   .wrap{
-    width:min(100% - 24px,650px);
-    padding-top:20px;
+    width:min(100% - 24px,620px);
+    padding-top:22px;
   }
 
-  .topbar{
-    margin-bottom:32px;
+  h1{
+    font-size:30px;
   }
 
-  .badge{
-    display:none;
-  }
-
-  .stats{
-    grid-template-columns:repeat(2,1fr);
-  }
-}
-
-@media(max-width:500px){
   .card{
-    padding:16px;
+    padding:14px;
     border-radius:18px;
   }
 
-  textarea{
-    min-height:300px;
+  .buttons{
+    flex-direction:column;
   }
 
-  .controls button{
-    flex:1;
+  button{
+    width:100%;
   }
 }
 </style>
+
 </head>
 
 <body>
 
-<div class="bg-orb orb1"></div>
-<div class="bg-orb orb2"></div>
-
 <div class="wrap">
 
-  <div class="topbar">
-    <div class="brand">
-      <div class="brand-icon">📦</div>
-      <div>
-        <b>نظام الجرد</b>
-        <span>أداة نقل ومعالجة الجرد النهائي</span>
-      </div>
-    </div>
+  <h1>📋 مُكمل استبيانات جرد المسؤولين</h1>
 
-    <div class="badge">● نظام النقل جاهز</div>
+  <div class="sub">
+    يحسب ويملأ الحقول المطلوبة فقط، مع إبقاء بقية الاستبيان كما هو.
   </div>
 
-  <section class="hero">
-    <div class="eyebrow">
-      <span class="dot"></span>
-      نقل الجرد إلى الروم النهائي
-    </div>
+  <div class="grid">
 
-    <h1>
-      معالجة <span>الجرد</span> النهائي
-    </h1>
+```
+<div class="card">
+  <label>استبيان الجرد الأساسي</label>
 
-    <p>
-      الصق استبيانات الجرد، وسيتم استخراج البيانات وحساب النقاط والتقييمات
-      وتجهيز النتيجة النهائية للنسخ.
-    </p>
-  </section>
+  <textarea id="inventory" placeholder="الصق استبيان الجرد الأساسي هنا..."></textarea>
 
-  <div class="card input-card">
+  <div class="buttons">
+    <button class="paste" onclick="pasteInto('inventory','status1')">
+      📋 لصق الاستبيان هنا
+    </button>
 
-    <div class="card-title">
-      <div class="card-icon">📋</div>
-      <div>
-        <h2>استبيانات الجرد</h2>
-        <p>الصق جميع الاستبيانات هنا</p>
-      </div>
-    </div>
+    <button class="clear" onclick="clearOne('inventory')">
+      مسح
+    </button>
+  </div>
 
-    <textarea
-      id="inputData"
-      placeholder="الصق استبيانات الجرد هنا..."
-    ></textarea>
+  <div id="status1" class="status"></div>
+</div>
 
-    <div class="controls">
-      <button class="primary" onclick="processData()">
-        ⚡ معالجة الجرد
-      </button>
+<div class="card">
+  <label>استبيان تقييم المسؤوليات</label>
 
-      <button class="dark" onclick="pasteData()">
-        📋 لصق
-      </button>
+  <textarea id="responsibilities" placeholder="الصق استبيان تقييم المسؤوليات هنا..."></textarea>
 
-      <button class="red" onclick="clearAll()">
-        🗑️ مسح الكل
-      </button>
-    </div>
+  <div class="buttons">
+    <button class="paste" onclick="pasteInto('responsibilities','status2')">
+      📋 لصق تقييم المسؤوليات هنا
+    </button>
 
-    <div id="status" class="status"></div>
+    <button class="clear" onclick="clearOne('responsibilities')">
+      مسح
+    </button>
+  </div>
+
+  <div id="status2" class="status"></div>
+</div>
+```
 
   </div>
 
+  <div class="card result">
 
-  <div class="stats">
+```
+<label>النتيجة</label>
 
-    <div class="stat">
-      <b id="totalCount">0</b>
-      <span>إجمالي الأشخاص</span>
-    </div>
+<textarea id="output" readonly placeholder="ستظهر النتيجة هنا..."></textarea>
 
-    <div class="stat">
-      <b id="activeCount">0</b>
-      <span>المتفاعلين</span>
-    </div>
+<div class="buttons">
+  <button class="main" onclick="completeSurvey()">
+    ✅ إكمال الاستبيان
+  </button>
 
-    <div class="stat">
-      <b id="badCount">0</b>
-      <span>غير المتفاعلين</span>
-    </div>
+  <button class="copy" onclick="copyResult()">
+    📄 نسخ النتيجة
+  </button>
 
-    <div class="stat">
-      <b id="outCount">0</b>
-      <span>خارج الخدمة</span>
-    </div>
+  <button class="clear" onclick="clearAll()">
+    🗑️ مسح الكل
+  </button>
+</div>
 
-  </div>
+<div id="status3" class="status"></div>
 
+<div class="note">
+  البونص مستقل: إكمال 16 ساعة خلال الأسبوع = 50 نقطة إضافية، أو إكمال 400 صورة في 📷〡مراقبة・السيناريوهات = 50 نقطة إضافية. يمكن الحصول على البونصين معًا إذا تحقق الشرطان.
+</div>
+```
 
-  <div class="card result-card">
-
-    <div class="result-head">
-      <div>
-        <h2>📄 نتيجة الجرد المنسقة</h2>
-      </div>
-
-      <div class="result-badge">
-        جاهز للنسخ
-      </div>
-    </div>
-
-    <textarea
-      id="outputData"
-      readonly
-      placeholder="ستظهر نتيجة الجرد هنا..."
-    ></textarea>
-
-    <div class="controls">
-
-      <button class="green" onclick="copyResult()">
-        📋 نسخ الجرد
-      </button>
-
-      <button class="orange" onclick="copyReport()">
-        📝 نسخ التقرير الأسبوعي
-      </button>
-
-    </div>
-
-    <div class="note">
-      يتم حساب إجمالي البوينتات من مجموع نقاط السيناريوهات + عدد ساعات التفاعل × 30.
-      تقييم المسؤوليات مستقل عن نقاط السيناريوهات، ويستخدم فقط عند تحديد التقييم النهائي.
-    </div>
-
-  </div>
-
-
-  <div class="card result-card">
-
-    <div class="result-head">
-      <div>
-        <h2>📊 التقرير الأسبوعي</h2>
-      </div>
-
-      <div class="result-badge">
-        تلقائي
-      </div>
-    </div>
-
-    <textarea
-      id="reportData"
-      readonly
-      placeholder="سيظهر التقرير الأسبوعي هنا..."
-    ></textarea>
-
-  </div>
-
-
-  <div class="footer">
-    نظام الجرد • أداة نقل الجرد النهائي
   </div>
 
 </div>
-
-<div id="toast" class="toast">
-  تم النسخ بنجاح
-</div>
-
 
 <script>
 
-/* =========================================================
-   إعدادات النظام
-   ========================================================= */
-
-const OUT_OF_SERVICE_ROLE_ID = "1480638365937434808";
-const OUT_OF_SERVICE_ROLE_MENTION =
-  `<@&${OUT_OF_SERVICE_ROLE_ID}>`;
+document.querySelectorAll('textarea').forEach(el=>{
+  el.addEventListener('paste',()=>setTimeout(()=>{},0));
+});
 
 
-/* =========================================================
-   تنظيف النصوص
-   ========================================================= */
+async function pasteInto(id,statusId){
+  const box=document.getElementById(id);
+  const status=document.getElementById(statusId);
 
-function removeFancyFont(text){
+  try{
+    const text=await navigator.clipboard.readText();
 
-  if(!text) return '';
-
-  let str=text.normalize('NFKD');
-  let clean='';
-
-  for(let i=0;i<str.length;i++){
-
-    let code=str.charCodeAt(i);
-
-    if(code>=0xD835){
-
-      let codePoint=str.codePointAt(i);
-
-      if(codePoint>=0x1D400 && codePoint<=0x1D419)
-        clean+=String.fromCharCode(65+(codePoint-0x1D400));
-
-      else if(codePoint>=0x1D41A && codePoint<=0x1D433)
-        clean+=String.fromCharCode(97+(codePoint-0x1D41A));
-
-      else if(codePoint>=0x1D434 && codePoint<=0x1D44D)
-        clean+=String.fromCharCode(65+(codePoint-0x1D434));
-
-      else if(codePoint>=0x1D44E && codePoint<=0x1D467)
-        clean+=String.fromCharCode(97+(codePoint-0x1D44E));
-
-      else if(codePoint>=0x1D468 && codePoint<=0x1D481)
-        clean+=String.fromCharCode(65+(codePoint-0x1D468));
-
-      else if(codePoint>=0x1D482 && codePoint<=0x1D49B)
-        clean+=String.fromCharCode(97+(codePoint-0x1D482));
-
-      else if(codePoint>=0x1D5D4 && codePoint<=0x1D5ED)
-        clean+=String.fromCharCode(65+(codePoint-0x1D5D4));
-
-      else if(codePoint>=0x1D5EE && codePoint<=0x1D607)
-        clean+=String.fromCharCode(97+(codePoint-0x1D5EE));
-
-      else if(codePoint>=0x1D608 && codePoint<=0x1D621)
-        clean+=String.fromCharCode(65+(codePoint-0x1D608));
-
-      else if(codePoint>=0x1D622 && codePoint<=0x1D63B)
-        clean+=String.fromCharCode(97+(codePoint-0x1D622));
-
-      else if(codePoint>=0x1D63C && codePoint<=0x1D655)
-        clean+=String.fromCharCode(65+(codePoint-0x1D63C));
-
-      else if(codePoint>=0x1D656 && codePoint<=0x1D66F)
-        clean+=String.fromCharCode(97+(codePoint-0x1D656));
-
-      i++;
-
-    }else{
-      clean+=str[i];
+    if(!text){
+      status.textContent='⚠️ الحافظة فارغة.';
+      return;
     }
-  }
 
-  return clean
-    .replace(/[\u0300-\u036f]/g,'')
+    box.value=text;
+    box.dispatchEvent(new Event('input',{bubbles:true}));
+    status.textContent='✅ تم اللصق من الحافظة.';
+
+  }catch(e){
+    box.focus();
+    status.textContent='⚠️ المتصفح منع القراءة المباشرة للحافظة. اضغط Ctrl+V هنا للسماح باللصق.';
+  }
+}
+
+
+function clearOne(id){
+  document.getElementById(id).value='';
+}
+
+
+function clearAll(){
+  ['inventory','responsibilities','output']
+    .forEach(id=>document.getElementById(id).value='');
+
+  ['status1','status2','status3']
+    .forEach(id=>document.getElementById(id).textContent='');
+}
+
+
+async function copyResult(){
+
+  const out=document.getElementById('output').value;
+
+  if(!out)return;
+
+  try{
+
+    await navigator.clipboard.writeText(out);
+
+    document.getElementById('status3').textContent='✅ تم نسخ النتيجة.';
+
+  }catch(e){
+
+    document.getElementById('output').focus();
+    document.execCommand('selectAll');
+    document.execCommand('copy');
+
+    document.getElementById('status3').textContent='✅ تم نسخ النتيجة.';
+  }
+}
+
+
+function num(s){
+
+  const m=String(s??'')
+    .replace(/[٠-٩]/g,d=>String('٠١٢٣٤٥٦٧٨٩'.indexOf(d)))
+    .match(/-?\d+(?:[.,]\d+)?/);
+
+  return m
+    ? parseFloat(m[0].replace(',','.'))
+    : 0;
+}
+
+
+function normalize(s){
+
+  return String(s||'')
+    .replace(/[٠-٩]/g,d=>String('٠١٢٣٤٥٦٧٨٩'.indexOf(d)))
+    .replace(/ي/g,'ي')
     .trim();
 }
 
 
-/* =========================================================
-   توحيد الرتب
-   ========================================================= */
+function getLine(text,label){
 
-function cleanAndStandardizeRank(rawRank){
-
-  if(!rawRank) return '';
-
-  let clean=removeFancyFont(rawRank);
-
-  const standardRanks=[
-    "Supervisor",
-    "Mod",
-    "Super Admin",
-    "Head Admin",
-    "Admin",
-    "Controller",
-    "Hand of the king",
-    "Pre Master",
-    "Master",
-    "Advisor",
-    "Operator",
-    "Marshal",
-    "Manager",
-    "Director",
-    "Executive",
-    "President",
-    "Commander",
-    "Mythical",
-    "Colonel",
-    "Boss",
-    "Big Boss",
-    "CEO",
-    "Co Founder",
-    "Founder",
-    "Consultant"
-  ];
-
-  const lowerClean=clean.toLowerCase();
-
-  for(let rank of standardRanks){
-
-    if(lowerClean.includes(rank.toLowerCase()))
-      return rank;
-
-  }
-
-  return clean;
-}
-
-
-/* =========================================================
-   تحويل المنشن
-   ========================================================= */
-
-function formatUserMention(rawInput){
-
-  if(!rawInput) return '';
-
-  const digitMatch=rawInput.match(/\d{17,20}/);
-
-  if(digitMatch)
-    return `<@${digitMatch[0]}>`;
-
-  let clean=rawInput
-    .replace(/[\u200B-\u200D\uFEFF\u200F]/g,'')
-    .replace(/@+/g,'')
-    .trim();
-
-  return `<@${clean}>`;
-}
-
-
-/* =========================================================
-   قراءة الحقول
-   ========================================================= */
-
-function getField(entry, labels){
-
-  const lines=entry.split(/\r?\n/);
+  const lines=text.split(/\r?\n/);
+  const target=normalize(label);
 
   for(const line of lines){
 
-    if(!line.includes(':')) continue;
+    const n=normalize(line);
 
-    const parts=line.split(':');
-    const key=parts[0].trim();
-    const value=parts.slice(1).join(':').trim();
+    if(n.includes(target)){
 
-    for(const label of labels){
+      const p=line.indexOf(':');
 
-      if(
-        key === label ||
-        key.replace(/\s+/g,' ') === label.replace(/\s+/g,' ')
-      ){
-        return value;
-      }
-
+      return p>=0
+        ? line.slice(p+1).trim()
+        : '';
     }
   }
 
@@ -769,66 +475,54 @@ function getField(entry, labels){
 }
 
 
-function getNumber(value){
+function replaceField(text,label,value){
 
-  if(!value) return 0;
-
-  const arabic=value.replace(
-    /[٠-٩]/g,
-    d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d)
+  const re=new RegExp(
+    '(^[ \\t]*'+
+    label.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+
+    '[ \\t]*:)[^\\r\\n]*',
+    'mi'
   );
 
-  const match=arabic.match(/-?\d+(?:[.,]\d+)?/);
+  if(re.test(text))
+    return text.replace(re,'$1 '+value);
 
-  return match
-    ? parseFloat(match[0].replace(',','.'))
-    : 0;
+  return text;
 }
 
 
-/* =========================================================
-   تحويل الساعات
-   ========================================================= */
+function replaceAny(text,labels,value){
 
-function parseHours(value){
+  for(const label of labels){
 
-  if(!value) return 0;
+    const before=text;
 
-  const arabic=value.replace(
-    /[٠-٩]/g,
-    d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d)
-  );
+    text=replaceField(text,label,value);
 
-  const time=arabic.match(
-    /^\s*(\d+)\s*:\s*(\d{1,2})\s*$/
-  );
-
-  if(time){
-
-    const hours=parseInt(time[1],10);
-    const minutes=parseInt(time[2],10);
-
-    return hours+(minutes/60);
+    if(text!==before)
+      return text;
   }
 
-  return getNumber(arabic);
+  return text;
 }
 
 
-/* =========================================================
-   نظام تقييم البوينتات
-   ========================================================= */
+function findTriple(text,label){
 
-function getRating(points){
+  const v=getLine(text,label);
+  const a=v.match(/\d+/g);
 
-  /*
-    أربع مستويات فقط:
+  return a&&a.length>=3
+    ? [+a[0],+a[1],+a[2]]
+    : [0,0,0];
+}
 
-    0 - 150       = سيء
-    151 - 250     = جيد جداً
-    251 - 400     = ممتاز
-    401 فما فوق   = ممتاز جداً
-  */
+
+/* =========================
+   نظام احتساب التقييم
+   ========================= */
+
+function rating(points){
 
   if(points<=150)
     return 'سيء';
@@ -839,22 +533,22 @@ function getRating(points){
   if(points<=400)
     return 'ممتاز';
 
-  return 'ممتاز جداً';
+  if(points>=401)
+    return 'ممتاز جداً';
+
+  return 'غير محدد';
 }
 
 
-/* =========================================================
-   ترتيب التقييمات
-   ========================================================= */
-
-const ratingRank={
+const rank={
   'سيء':0,
   'جيد جداً':1,
   'ممتاز':2,
   'ممتاز جداً':3
 };
 
-const ratingNames=[
+
+const rankName=[
   'سيء',
   'جيد جداً',
   'ممتاز',
@@ -862,22 +556,14 @@ const ratingNames=[
 ];
 
 
-/* =========================================================
+/* =========================
    تقييم المسؤوليات
-   ========================================================= */
+   مراقبة اللوقات مستثناة
+   ========================= */
 
-function getResponsibilityRating(entry){
+function responsibilityRating(text){
 
-  /*
-    مسؤول مراقبة اللوقات مستثناة بالكامل.
-
-    يتم:
-    1. أخذ أعلى تقييم.
-    2. كل "سيء" ينزل مرتبة واحدة.
-    3. سيء في مسؤوليتين = نزول مرتبتين.
-  */
-
-  const responsibilities=[
+  const labels=[
     'مسؤول تدقيق الصور',
     'مسؤول الملاحظات',
     'مسؤول الاجازات',
@@ -886,614 +572,817 @@ function getResponsibilityRating(entry){
     'مسؤول دفتر الحضور'
   ];
 
-  let ratings=[];
+  let vals=[];
 
-  for(const responsibility of responsibilities){
+  for(const l of labels){
 
-    const value=getField(entry,[responsibility])
+    const v=normalize(getLine(text,l))
       .replace(/\s+/g,' ')
       .trim();
 
-    if(!value) continue;
-
     if(
-      value.includes('لا يوجد') ||
-      value.includes('لايوجد')
-    ){
+      !v ||
+      v.includes('لا يوجد') ||
+      v.includes('لايوجد')
+    )
       continue;
-    }
 
-    if(
-      /ممتاز\s*جداً|ممتاز\s*جدا/.test(value)
-    ){
-      ratings.push(3);
-    }
 
-    else if(
-      /جيد\s*جداً|جيد\s*جدا/.test(value)
-    ){
-      ratings.push(1);
-    }
+    if(/ممتاز\s*جداً|ممتاز\s*جدا/.test(v)){
 
-    else if(
-      /ممتاز/.test(value)
-    ){
-      ratings.push(2);
-    }
+      vals.push(3);
 
-    else if(
-      /سيء|سيئ/.test(value)
-    ){
-      ratings.push(0);
+    }else if(/جيد\s*جداً|جيد\s*جدا/.test(v)){
+
+      vals.push(1);
+
+    }else if(/ممتاز/.test(v)){
+
+      vals.push(2);
+
+    }else if(/سيء|سيئ/.test(v)){
+
+      vals.push(0);
     }
   }
 
-  if(!ratings.length)
-    return 'سيء';
 
-  const highest=Math.max(...ratings);
+  if(!vals.length)
+    return 'غير محدد';
 
-  const badCount=ratings.filter(
-    x=>x===0
-  ).length;
 
-  const finalRank=Math.max(
-    0,
-    highest-badCount
-  );
+  const highest=Math.max(...vals);
 
-  return ratingNames[finalRank];
+  const badCount=vals.filter(x=>x===0).length;
+
+
+  /*
+    كل تقييم سيء ينزل مرتبة واحدة
+    من أعلى تقييم.
+  */
+
+  return rankName[
+    Math.max(0,highest-badCount)
+  ];
 }
 
 
-/* =========================================================
+/* =========================
    التقييم النهائي
-   ========================================================= */
+   ========================= */
 
-function calculateFinalRating(
-  sectionRating,
-  responsibilityRating
-){
+function finalRating(base,respons){
 
-  const sectionRank=ratingRank[sectionRating];
-  const responsibilityRank=ratingRank[responsibilityRating];
+  if(!(base in rank) || !(respons in rank))
+    return base;
+
 
   /*
-    إذا تقييم المسؤوليات أقل من تقييم القسم:
-    ينزل التقييم النهائي مرتبة واحدة فقط.
+    التقييم النهائي يعتمد على مقارنة
+    تقييم القسم مع تقييم المسؤوليات.
 
-    مثال:
-    ممتاز + جيد جداً
-    = ممتاز
+    إذا كان تقييم المسؤوليات أقل:
+    ننزل تقييم القسم مرتبة واحدة فقط.
 
-    ممتاز + سيء
-    = جيد جداً
-
-    ممتاز جداً + سيء
-    = ممتاز
-
-    ممتاز جداً + جيد جداً
-    = ممتاز
+    لا ننزل تقييم المسؤوليات.
   */
 
-  if(
-    responsibilityRank < sectionRank
-  ){
+  if(rank[respons] < rank[base]){
 
-    return ratingNames[
-      Math.max(0,sectionRank-1)
+    return rankName[
+      Math.max(0,rank[base]-1)
     ];
   }
 
-  return sectionRating;
+
+  return base;
 }
 
 
-/* =========================================================
-   استخراج نقاط السيناريوهات
-   ========================================================= */
-
-function getScenarioPoints(entry){
-
-  /*
-    هذا الحقل هو:
-    إجمالي نقاط السيناريوهات
-
-    لا يتم إدخال تقييم المسؤوليات فيه.
-    نقاط المسؤوليات لا تؤثر على هذا الرقم.
-  */
-
-  const value=getField(entry,[
-    'اجمالي نقاط السيناريوهات',
-    'إجمالي نقاط السيناريوهات',
-    'اجمالي نقاط السيناريو',
-    'إجمالي نقاط السيناريو'
-  ]);
-
-  return getNumber(value);
-}
-
-
-/* =========================================================
-   استخراج الساعات
-   ========================================================= */
-
-function getInteractionHours(entry){
-
-  const value=getField(entry,[
-    'مجموع الساعات',
-    'إجمالي الساعات',
-    'اجمالي الساعات',
-    'مجموع ساعات تسجيل الدخول',
-    'إجمالي ساعات تسجيل الدخول',
-    'اجمالي ساعات تسجيل الدخول',
-    'عدد ساعات تسجيل الدخول',
-    'ساعات تسجيل الدخول',
-    'ساعات التسجيل'
-  ]);
-
-  return parseHours(value);
-}
-
-
-/* =========================================================
-   معالجة شخص واحد
-   ========================================================= */
-
-function processEntry(entry){
-
-  const user=getField(entry,[
-    'منشن الشخص'
-  ]);
-
-  if(!user)
-    return null;
-
-  const rank=getField(entry,[
-    'الرتبة الادارية',
-    'الرتبة  الادارية'
-  ]);
-
-  const scenarioPoints=getScenarioPoints(entry);
-
-  const rawHours=getInteractionHours(entry);
-
-  /*
-    كل ساعة = 30 بوينت.
-
-    نستخدم الساعات الفعلية هنا.
-    مثال:
-    10 ساعات = 300 نقطة.
-  */
-
-  const hourPoints=rawHours*30;
-
-  /*
-    إجمالي البوينتات:
-    نقاط الساعات + نقاط السيناريوهات
-  */
-
-  const totalPoints=
-    hourPoints+
-    scenarioPoints;
-
-  /*
-    التقييم الأساسي حسب إجمالي البوينتات.
-  */
-
-  const sectionRating=
-    getRating(totalPoints);
-
-  /*
-    تقييم المسؤوليات مستقل.
-  */
-
-  const responsibilityRating=
-    getResponsibilityRating(entry);
-
-  /*
-    التقييم النهائي.
-  */
-
-  const finalRating=
-    calculateFinalRating(
-      sectionRating,
-      responsibilityRating
-    );
-
-  /*
-    خارج الخدمة.
-  */
-
-  const finalEval=getField(entry,[
-    'التقيم النهائي',
-    'التقييم النهائي'
-  ]);
-
-  const isOutOfService=
-    /خارج\s*الخدمة|خارج\s*خدمة|إجازة|اجازة/.test(
-      finalEval
-    ) ||
-    /<@&\d{17,20}>/.test(finalEval);
-
-  let outputFinal=finalRating;
-
-  if(isOutOfService){
-
-    const roleMention=
-      finalEval.match(
-        /<@&\d{17,20}>/
-      );
-
-    outputFinal=
-      roleMention
-        ? roleMention[0]
-        : OUT_OF_SERVICE_ROLE_MENTION;
-  }
-
-  return {
-    userMention:formatUserMention(user),
-    rank:cleanAndStandardizeRank(rank),
-    scenarioPoints,
-    hours:rawHours,
-    hourPoints,
-    totalPoints,
-    sectionRating,
-    responsibilityRating,
-    finalRating:outputFinal,
-    isOutOfService
-  };
-}
-
-
-/* =========================================================
-   معالجة كل الجرد
-   ========================================================= */
-
-function processData(){
-
-  const input=
-    document.getElementById('inputData').value;
-
-  const output=
-    document.getElementById('outputData');
-
-  const report=
-    document.getElementById('reportData');
-
-  const status=
-    document.getElementById('status');
-
-  if(!input.trim()){
-
-    output.value='';
-    report.value='';
-
-    updateStats(0,0,0,0);
-
-    status.textContent=
-      '⚠️ الصق استبيانات الجرد أولاً.';
-
-    return;
-  }
-
-
-  /*
-    كل استبيان يبدأ عند:
-    منشن الشخص
-  */
-
-  const entries=
-    input.split(/(?=منشن الشخص\s*:)/g);
-
-  const results=[];
-
-  entries.forEach(entry=>{
-
-    if(!entry.trim()) return;
-
-    const person=
-      processEntry(entry);
-
-    if(person)
-      results.push(person);
-  });
-
-
-  if(!results.length){
-
-    output.value='';
-
-    status.textContent=
-      '⚠️ لم يتم العثور على استبيانات صالحة. تأكد من وجود حقل "منشن الشخص".';
-
-    updateStats(0,0,0,0);
-
-    return;
-  }
-
-
-  let finalText='';
-
-  const separator=
-    '`-----------------------------------------------------`';
-
-
-  let active=0;
-  let bad=0;
-  let out=0;
-
-
-  results.forEach(person=>{
-
-    if(person.isOutOfService){
-
-      out++;
-
-    }else if(
-      person.finalRating==='سيء'
-    ){
-
-      bad++;
-
-    }else{
-
-      active++;
-
-    }
-
-
-    finalText+=
-      separator+'\n';
-
-    finalText+=
-      person.userMention+'\n';
-
-    finalText+=
-      'التقييم : '+
-      person.finalRating+
-      '\n';
-
-    finalText+=
-      'الرتبة الادارية : '+
-      person.rank+
-      '\n';
-
-    finalText+=
-      separator+
-      '\n';
-  });
-
-
-  output.value=
-    finalText.trim();
-
-
-  /*
-    التقرير الأسبوعي
-  */
-
-  const total=results.length;
-
-  const reportText=
-`** كم العدد حالي بالقسم: ${total}
-
-كم عدد ماخذين اجازة : ${out}
-
-عدد غير متفاعلين : ${bad}
-
-عدد المتفاعلين بالقسم : ${active}
-
-هل يوجد ملاحظة بالقسم او حاب تطور شي من جميع نواحي : لايوجد يعطيكم العافية **`;
-
-  report.value=reportText;
-
-
-  updateStats(
-    total,
-    active,
-    bad,
-    out
-  );
-
-
-  status.textContent=
-    `✅ تم تجهيز ${total} استبيان بنجاح.`;
-}
-
-
-/* =========================================================
-   الإحصائيات
-   ========================================================= */
-
-function updateStats(
-  total,
-  active,
-  bad,
-  out
-){
-
-  document.getElementById(
-    'totalCount'
-  ).textContent=total;
-
-  document.getElementById(
-    'activeCount'
-  ).textContent=active;
-
-  document.getElementById(
-    'badCount'
-  ).textContent=bad;
-
-  document.getElementById(
-    'outCount'
-  ).textContent=out;
-}
-
-
-/* =========================================================
-   النسخ
-   ========================================================= */
-
-async function copyResult(){
-
-  const text=
-    document.getElementById(
-      'outputData'
-    ).value;
-
-  if(!text) return;
-
-  try{
-
-    await navigator.clipboard.writeText(text);
-
-  }catch(e){
-
-    const area=
-      document.getElementById(
-        'outputData'
-      );
-
-    area.focus();
-    area.select();
-
-    document.execCommand('copy');
-  }
-
-  showToast();
-}
-
-
-async function copyReport(){
-
-  const text=
-    document.getElementById(
-      'reportData'
-    ).value;
-
-  if(!text) return;
-
-  try{
-
-    await navigator.clipboard.writeText(text);
-
-  }catch(e){
-
-    const area=
-      document.getElementById(
-        'reportData'
-      );
-
-    area.focus();
-    area.select();
-
-    document.execCommand('copy');
-  }
-
-  showToast();
-}
-
-
-/* =========================================================
-   لصق
-   ========================================================= */
-
-async function pasteData(){
-
-  try{
-
-    const text=
-      await navigator.clipboard.readText();
-
-    if(!text){
-
-      document.getElementById(
-        'status'
-      ).textContent=
-        '⚠️ الحافظة فارغة.';
-
-      return;
-    }
-
-    document.getElementById(
-      'inputData'
-    ).value=text;
-
-    processData();
-
-  }catch(e){
-
-    document.getElementById(
-      'inputData'
-    ).focus();
-
-    document.getElementById(
-      'status'
-    ).textContent=
-      '⚠️ المتصفح منع الوصول للحافظة. اضغط Ctrl + V للصق البيانات.';
-  }
-}
-
-
-/* =========================================================
-   المسح
-   ========================================================= */
-
-function clearAll(){
-
-  document.getElementById(
-    'inputData'
-  ).value='';
-
-  document.getElementById(
-    'outputData'
-  ).value='';
-
-  document.getElementById(
-    'reportData'
-  ).value='';
-
-  document.getElementById(
-    'status'
-  ).textContent='';
-
-  updateStats(0,0,0,0);
-}
-
-
-/* =========================================================
-   رسالة النسخ
-   ========================================================= */
-
-function showToast(){
-
-  const toast=
-    document.getElementById(
-      'toast'
-    );
-
-  toast.classList.add('show');
-
-  setTimeout(
-    ()=>{
-      toast.classList.remove('show');
+/* =========================
+   نقاط تفاعل المسؤوليات
+   ========================= */
+
+function responsibilityInteractionPoints(text){
+
+  const bonuses=[
+
+    {
+      labels:[
+        'مسؤول الاجازات',
+        'مسؤول الإجازات'
+      ],
+      points:50
     },
-    1800
-  );
+
+    {
+      labels:[
+        'مسؤول مراقبة اللوقات'
+      ],
+      points:75
+    },
+
+    {
+      labels:[
+        'مسؤول الملاحظات'
+      ],
+      points:75
+    },
+
+    {
+      labels:[
+        'مسؤول تدقيق الصور'
+      ],
+      points:75
+    },
+
+    {
+      labels:[
+        'مسؤول دفتر الحضور'
+      ],
+      points:100
+    }
+  ];
+
+
+  let total=0;
+
+
+  for(const item of bonuses){
+
+    let found=false;
+
+
+    for(const label of item.labels){
+
+      const value=normalize(getLine(text,label))
+        .replace(/\s+/g,' ')
+        .trim();
+
+
+      if(
+        !value ||
+        value.includes('لا يوجد') ||
+        value.includes('لايوجد')
+      )
+        continue;
+
+
+      /*
+        نقاط المسؤولية تُحسب عند ممتاز
+        أو ممتاز جداً.
+      */
+
+      if(
+        /ممتاز\s*جداً|ممتاز\s*جدا/.test(value) ||
+        /ممتاز/.test(value)
+      ){
+
+        found=true;
+        break;
+      }
+    }
+
+
+    if(found)
+      total+=item.points;
+  }
+
+
+  return total;
 }
 
 
-/* =========================================================
-   معالجة تلقائية عند اللصق/الكتابة
-   ========================================================= */
+/* =========================
+   تحديد جرد الأعضاء
+   ========================= */
 
-document
-  .getElementById('inputData')
-  .addEventListener(
-    'input',
-    processData
+function isMemberInventory(text){
+
+  const n=normalize(text)
+    .replace(/\s+/g,' ');
+
+  return /جرد\s*الاعضاء|جرد\s*الأعضاء/.test(n)
+    || /عدد\s*ساعات\s*مراقب\s*سرقات/.test(n);
+}
+
+
+/* =========================
+   ساعات جرد الأعضاء
+   ========================= */
+
+function getMemberRobberyHours(text){
+
+  const value=getLine(
+    text,
+    'عدد ساعات مراقب سرقات'
   );
+
+  const tm=value.match(
+    /^\s*(\d+)\s*:\s*(\d{1,2})\s*$/
+  );
+
+
+  if(tm){
+
+    return parseInt(tm[1],10)
+      + parseInt(tm[2],10)/60;
+  }
+
+
+  return num(value);
+}
+
+
+/* =========================
+   الدالة الرئيسية
+   ========================= */
+
+function completeSurvey(){
+
+  const inv=document.getElementById('inventory').value;
+  const resp=document.getElementById('responsibilities').value;
+
+
+  if(!inv.trim()){
+
+    document.getElementById('status3').textContent=
+      '⚠️ أدخل استبيان الجرد الأساسي أولاً.';
+
+    return;
+  }
+
+
+  const memberInventory=isMemberInventory(inv);
+
+
+  /* =========================
+     جرد الأعضاء
+     ========================= */
+
+  if(memberInventory){
+
+    const rawHours=getMemberRobberyHours(inv);
+
+    const hours=Math.round(rawHours);
+
+
+    const jew=findTriple(
+      inv,
+      'عدد مراقبة المجوهرات + البنوك + اليخت'
+    );
+
+    const official=findTriple(
+      inv,
+      'عدد مراقبة سيناريوهات البنك المركزي + الميترو + الاستوديو'
+    );
+
+    const shops=findTriple(
+      inv,
+      'عدد مراقبة سرقة المنزل + بقالة + مصرف'
+    );
+
+
+    /*
+      نقاط السيناريوهات
+    */
+
+    let scenario=
+
+      official.reduce((a,b)=>a+b,0)*6
+
+      +
+
+      jew.reduce((a,b)=>a+b,0)*5
+
+      +
+
+      shops.reduce((a,b)=>a+b,0)*3;
+
+
+    /*
+      بونص 400 صورة
+    */
+
+    const imgLine=
+
+      getLine(
+        inv,
+        'هل أكمل مراقبة 400 صورة خلال الأسبوع؟'
+      )
+
+      ||
+
+      getLine(
+        inv,
+        'هل أكمل مراقبة 300 صورة خلال الأسبوع؟'
+      )
+
+      ||
+
+      getLine(
+        inv,
+        'مجموع الصور للسرقات'
+      );
+
+
+    const imgCount=num(imgLine);
+
+
+    if(
+      imgCount>=400 ||
+      /400/.test(imgLine)
+    )
+      scenario+=50;
+
+
+    /*
+      بونص 16 ساعة
+    */
+
+    if(hours>=16)
+      scenario+=50;
+
+
+    /*
+      كل ساعة = 30 نقطة
+    */
+
+    const hourPoints=hours*30;
+
+
+    /*
+      جرد الأعضاء لا يعتمد على
+      استبيان المسؤوليات.
+    */
+
+    const total=
+      hourPoints+
+      scenario;
+
+
+    const base=rating(total);
+
+
+    let out=inv;
+
+
+    out=replaceAny(
+      out,
+      [
+        'اجمالي نقاط السيناريوهات',
+        'إجمالي نقاط السيناريوهات'
+      ],
+      scenario
+    );
+
+
+    out=replaceAny(
+      out,
+      [
+        'مجموع البوينتات',
+        'اجمالي البوينتات',
+        'إجمالي البوينتات'
+      ],
+      total
+    );
+
+
+    out=replaceAny(
+      out,
+      ['التقييم'],
+      base
+    );
+
+
+    out=replaceAny(
+      out,
+      [
+        'التقيم النهائي',
+        'التقييم النهائي'
+      ],
+      base
+    );
+
+
+    document.getElementById('output').value=out;
+
+
+    document.getElementById('status3').textContent=
+      '✅ تم إكمال جرد الأعضاء. الساعات: '+
+      hours+
+      ' ساعة = '+
+      hourPoints+
+      ' نقطة | نقاط السيناريوهات: '+
+      scenario+
+      ' نقطة.';
+
+
+    return;
+  }
+
+
+  /* =========================
+     استخراج ساعات تسجيل الدخول
+     ========================= */
+
+  function getLoginHours(text){
+
+    const directLabels=[
+
+      'مجموع الساعات',
+
+      'اجمالي ساعات تسجيل الدخول',
+
+      'إجمالي ساعات تسجيل الدخول',
+
+      'مجموع ساعات تسجيل الدخول',
+
+      'عدد ساعات تسجيل الدخول',
+
+      'ساعات تسجيل الدخول',
+
+      'ساعات التسجيل',
+
+      'اجمالي الساعات',
+
+      'إجمالي الساعات'
+    ];
+
+
+    /*
+      قراءة مجموع الساعات أولاً
+    */
+
+    for(const label of directLabels){
+
+      const value=getLine(text,label);
+
+
+      if(value!==''){
+
+        const tm=value.match(
+          /^\s*(\d+)\s*:\s*(\d{1,2})\s*$/
+        );
+
+
+        if(tm){
+
+          const h=parseInt(tm[1],10);
+          const m=parseInt(tm[2],10);
+
+          return h+(m/60);
+        }
+
+
+        if(/\d/.test(value))
+          return num(value);
+      }
+    }
+
+
+    /*
+      البحث عن أي سطر يحتوي
+      تسجيل الدخول + ساعات
+    */
+
+    const lines=text.split(/\r?\n/);
+
+
+    for(const line of lines){
+
+      const n=normalize(line)
+        .replace(/\s+/g,' ');
+
+
+      if(
+        /تسجيل\s*الدخول/.test(n) &&
+        /ساع/.test(n) &&
+        /\d/.test(n)
+      ){
+
+        const p=line.indexOf(':');
+
+        const value=
+          p>=0
+            ? line.slice(p+1).trim()
+            : line.trim();
+
+
+        const tm=value.match(
+          /^\s*(\d+)\s*:\s*(\d{1,2})\s*$/
+        );
+
+
+        if(tm){
+
+          return parseInt(tm[1],10)
+            +parseInt(tm[2],10)/60;
+        }
+
+
+        return num(value);
+      }
+    }
+
+
+    /*
+      الاستبيانات القديمة
+      التي توزع الساعات.
+    */
+
+    return num(
+      getLine(text,'ساعات مراقب سرقات')
+    )
+
+    +
+
+    num(
+      getLine(text,'ساعات مراقب سيناريوهات')
+    )
+
+    +
+
+    num(
+      getLine(text,'ساعات مراقب عام')
+    );
+  }
+
+
+  const rawHours=getLoginHours(inv);
+
+  /*
+    تقريب الساعات لأقرب ساعة:
+    1:31 = 2
+    2:29 = 2
+    2:30 = 3
+  */
+
+  const hours=Math.round(rawHours);
+
+
+  /* =========================
+     نقاط السيناريوهات
+     ========================= */
+
+  const shared=num(
+    getLine(
+      inv,
+      'عدد مراقبة السيناريو المشترك'
+    )
+  );
+
+
+  const jew=findTriple(
+    inv,
+    'عدد مراقبة المجوهرات + البنوك + اليخت'
+  );
+
+
+  const official=findTriple(
+    inv,
+    'عدد مراقبة سيناريوهات البنك المركزي + الميترو + الاستوديو'
+  );
+
+
+  const unsafe=
+
+    num(
+      getLine(
+        inv,
+        'السرقات بالمناطق غير الآمنة'
+      )
+    )
+
+    ||
+
+    num(
+      getLine(
+        inv,
+        'عدد مراقبة السرقات بالمناطق غير الآمنة'
+      )
+    );
+
+
+  const shops=findTriple(
+    inv,
+    'عدد مراقبة سرقة المنزل + بقالة + مصرف'
+  );
+
+
+  /*
+    نظام نقاط السيناريوهات
+  */
+
+  let scenario=
+
+    shared*8
+
+    +
+
+    official.reduce((a,b)=>a+b,0)*6
+
+    +
+
+    jew.reduce((a,b)=>a+b,0)*5
+
+    +
+
+    unsafe*4
+
+    +
+
+    shops.reduce((a,b)=>a+b,0)*3;
+
+
+  /* =========================
+     بونص 16 ساعة
+     ========================= */
+
+  if(hours>=16)
+    scenario+=50;
+
+
+  /* =========================
+     بونص 400 صورة
+     ========================= */
+
+  const imgLine=
+
+    getLine(
+      inv,
+      'هل أكمل مراقبة 400 صورة خلال الأسبوع؟'
+    )
+
+    ||
+
+    getLine(
+      inv,
+      'هل أكمل مراقبة 300 صورة خلال الأسبوع؟'
+    );
+
+
+  const imgCount=num(imgLine);
+
+
+  if(
+    imgCount>=400 ||
+    /400/.test(imgLine)
+  )
+    scenario+=50;
+
+
+  /* =========================
+     نقاط المسؤوليات
+     ========================= */
+
+  const responsibilityPoints=
+    responsibilityInteractionPoints(resp);
+
+
+  /*
+    كل ساعة = 30 نقطة
+  */
+
+  const hourPoints=
+    hours*30;
+
+
+  /*
+    المعادلة النهائية المطلوبة:
+
+    إجمالي البوينتات =
+    نقاط الساعات
+    +
+    نقاط السيناريوهات
+    +
+    نقاط المسؤوليات
+  */
+
+  const total=
+    hourPoints+
+    scenario+
+    responsibilityPoints;
+
+
+  /*
+    التقييم يعتمد على إجمالي البوينتات
+  */
+
+  const base=rating(total);
+
+
+  /*
+    تقييم المسؤوليات
+  */
+
+  const respRating=
+    responsibilityRating(resp);
+
+
+  /*
+    التقييم النهائي
+  */
+
+  const final=
+    finalRating(
+      base,
+      respRating
+    );
+
+
+  /* =========================
+     تعبئة النتيجة
+     ========================= */
+
+  let out=inv;
+
+
+  out=replaceAny(
+    out,
+    [
+      'اجمالي نقاط السيناريوهات',
+      'إجمالي نقاط السيناريوهات'
+    ],
+    scenario
+  );
+
+
+  out=replaceAny(
+    out,
+    [
+      'مجموع البوينتات',
+      'اجمالي البوينتات',
+      'إجمالي البوينتات'
+    ],
+    total
+  );
+
+
+  out=replaceAny(
+    out,
+    ['التقييم'],
+    base
+  );
+
+
+  out=replaceAny(
+    out,
+    [
+      'تقيم المسؤوليات',
+      'تقييم المسؤوليات'
+    ],
+    respRating
+  );
+
+
+  out=replaceAny(
+    out,
+    [
+      'التقيم النهائي',
+      'التقييم النهائي'
+    ],
+    final
+  );
+
+
+  document.getElementById('output').value=out;
+
+
+  document.getElementById('status3').textContent=
+
+    '✅ تم إكمال الاستبيان. '+
+
+    'الساعات: '+
+    hours+
+    ' ساعة = '+
+    hourPoints+
+    ' نقطة | '+
+
+    'نقاط السيناريوهات: '+
+    scenario+
+    ' نقطة | '+
+
+    'نقاط المسؤوليات: '+
+    responsibilityPoints+
+    ' نقطة | '+
+
+    'إجمالي البوينتات: '+
+    total+
+    ' نقطة | '+
+
+    'التقييم: '+
+    base+
+    ' | '+
+
+    'تقييم المسؤوليات: '+
+    respRating+
+    ' | '+
+
+    'التقييم النهائي: '+
+    final+
+    '.';
+}
 
 </script>
 
