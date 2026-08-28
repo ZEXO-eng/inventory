@@ -62,7 +62,7 @@ button:hover{filter:brightness(1.12)}
     </div>
     <div id="status3" class="status"></div>
     <div class="note">
-       شرط البونص يُطبّق حسب النص: 16 ساعة و400 صورة.
+       البونص مستقل: إكمال 16 ساعة خلال الأسبوع = 50 نقطة إضافية، أو إكمال 400 صورة في 📷〡مراقبة・السيناريوهات = 50 نقطة إضافية. يمكن الحصول على البونصين معًا إذا تحقق الشرطان.
     </div>
   </div>
 </div>
@@ -284,6 +284,9 @@ function completeSurvey(){
     const imgCount=num(imgLine);
     if(imgCount>=400 || /400/.test(imgLine)) scenario+=50;
 
+    // بونص الساعات مستقل: 16 ساعة = 50 نقطة إضافية.
+    if(hours>=16) scenario+=50;
+
     const hourPoints=hours*30;
     const total=hourPoints+scenario;
     const base=rating(total);
@@ -376,10 +379,12 @@ function completeSurvey(){
     + unsafe*4
     + shops.reduce((a,b)=>a+b,0)*3;
 
-  // بونص الجرد: 16 ساعة مراقبة خلال الأسبوع = 50 نقطة إضافية
+  // البونصان مستقلان:
+  // 16 ساعة خلال الأسبوع = 50 نقطة، ولا يشترط إكمال 400 صورة.
   if(hours>=16) scenario+=50;
 
-  // بونص الصور: إكمال 400 صورة = 50 نقطة إضافية
+  // 400 صورة خلال الأسبوع = 50 نقطة، ولا يشترط إكمال 16 ساعة.
+  // إذا تحقق الشرطان يحصل على 100 نقطة إجمالًا.
   const imgLine =
     getLine(inv,'هل أكمل مراقبة 400 صورة خلال الأسبوع؟') ||
     getLine(inv,'هل أكمل مراقبة 300 صورة خلال الأسبوع؟');
