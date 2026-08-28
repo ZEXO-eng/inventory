@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -1053,15 +1054,18 @@ function completeSurvey(){
       num(imgLine);
 
 
+    let bonus=0;
+
+
     if(
       imgCount>=400 ||
       /400/.test(imgLine)
     )
-      scenario+=50;
+      bonus+=50;
 
 
     if(hours>=16)
-      scenario+=50;
+      bonus+=50;
 
 
     const hourPoints=
@@ -1070,7 +1074,8 @@ function completeSurvey(){
 
     const total=
       hourPoints+
-      scenario;
+      scenario+
+      bonus;
 
 
     const base=
@@ -1240,7 +1245,7 @@ function completeSurvey(){
 
 
       if(tm)
-        return parseInt(tm[1],10);
+        return parseInt(tm[1,],10);
 
 
       /*
@@ -1451,8 +1456,10 @@ function completeSurvey(){
      بونص 16 ساعة
      ========================= */
 
+  let bonus=0;
+
   if(hours>=16)
-    scenario+=50;
+    bonus+=50;
 
 
   /* =========================
@@ -1482,7 +1489,7 @@ function completeSurvey(){
     imgCount>=400 ||
     /400/.test(imgLine)
   )
-    scenario+=50;
+    bonus+=50;
 
 
   /* =========================
@@ -1504,12 +1511,15 @@ function completeSurvey(){
     نقاط السيناريوهات
     +
     نقاط المسؤوليات
+    +
+    نقاط البونص
   */
 
   const total=
     hourPoints+
     scenario+
-    responsibilityPoints;
+    responsibilityPoints+
+    bonus;
 
 
   const base=
@@ -1640,3 +1650,4 @@ function completeSurvey(){
 
 </body>
 </html>
+```
