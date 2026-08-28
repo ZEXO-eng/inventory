@@ -193,6 +193,21 @@ textarea:focus{
     0 15px 40px rgba(0,0,0,.25);
 }
 
+/* =========================
+   خانات الأعضاء الجدد والخارجين
+   ========================= */
+
+.member-options{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  margin-bottom:12px;
+}
+
+.member-options textarea{
+  min-height:150px;
+}
+
 .buttons{
   display:flex;
   gap:8px;
@@ -276,7 +291,8 @@ button .emoji{
 }
 
 @media(max-width:850px){
-  .grid{
+  .grid,
+  .member-options{
     grid-template-columns:1fr;
     gap:10px;
   }
@@ -306,6 +322,7 @@ button .emoji{
   }
 }
 </style>
+
 </head>
 
 <body>
@@ -319,6 +336,87 @@ button .emoji{
 
   <div class="sub">
     يحسب ويملأ الحقول المطلوبة فقط، مع إبقاء بقية الاستبيان كما هو.
+  </div>
+
+  <!-- =========================
+       الأعضاء الجدد / خارج الخدمة
+       ========================= -->
+
+  <div class="member-options">
+
+    <div class="card">
+
+      <label>الأعضاء الجدد</label>
+
+      <textarea
+        id="newMembers"
+        placeholder="اكتب منشنات الأعضاء الجدد هنا...
+
+مثال:
+<@123456789>
+<@987654321>"
+      ></textarea>
+
+      <div class="buttons">
+
+        <button
+          class="paste"
+          onclick="pasteInto('newMembers','statusNew')"
+        >
+          <span class="emoji">📋</span>
+          لصق المنشنات هنا
+        </button>
+
+        <button
+          class="clear"
+          onclick="clearOne('newMembers')"
+        >
+          مسح
+        </button>
+
+      </div>
+
+      <div id="statusNew" class="status"></div>
+
+    </div>
+
+
+    <div class="card">
+
+      <label>الأعضاء خارج الخدمة الإدراية</label>
+
+      <textarea
+        id="outOfService"
+        placeholder="اكتب منشنات الأعضاء خارج الخدمة هنا...
+
+مثال:
+<@123456789>
+<@987654321>"
+      ></textarea>
+
+      <div class="buttons">
+
+        <button
+          class="paste"
+          onclick="pasteInto('outOfService','statusOut')"
+        >
+          <span class="emoji">📋</span>
+          لصق المنشنات هنا
+        </button>
+
+        <button
+          class="clear"
+          onclick="clearOne('outOfService')"
+        >
+          مسح
+        </button>
+
+      </div>
+
+      <div id="statusOut" class="status"></div>
+
+    </div>
+
   </div>
 
   <div class="grid">
@@ -441,7 +539,6 @@ button .emoji{
 
 </div>
 
-
 <script>
 
 document.querySelectorAll('textarea').forEach(el=>{
@@ -489,25 +586,26 @@ function clearOne(id){
 
 function clearAll(){
 
-  [
-    'inventory',
-    'responsibilities',
-    'output'
-  ].forEach(
-    id=>
-      document.getElementById(id).value=''
-  );
+[
+'inventory',
+'responsibilities',
+'output'
+].forEach(
+id=>
+document.getElementById(id).value=''
+);
 
-  [
-    'status1',
-    'status2',
-    'status3'
-  ].forEach(
-    id=>
-      document.getElementById(id).textContent=''
-  );
+[
+'status1',
+'status2',
+'status3'
+].forEach(
+id=>
+document.getElementById(id).textContent=''
+);
 
 }
+
 
 
 async function copyResult(){
@@ -651,6 +749,126 @@ function findTriple(text,label){
   return a&&a.length>=3
     ? [+a[0],+a[1],+a[2]]
     : [0,0,0];
+
+}
+
+
+/* =========================
+   استخراج ID العضو من المنشن
+   ========================= */
+
+function getMemberId(text){
+
+  if(!text)
+    return '';
+
+  /*
+    يدعم:
+    <@123456789>
+    <@!123456789>
+  */
+
+  const match=
+    String(text).match(/<@!?(\d+)>/);
+
+  return match
+    ? match[1]
+    : '';
+
+}
+
+
+/* =========================
+   استخراج جميع IDs من الخانات
+   ========================= */
+
+function getMentionIds(text){
+
+  if(!text)
+    return [];
+
+  const matches=
+    String(text).match(/<@!?(\d+)>/g);
+
+  if(!matches)
+    return [];
+
+  return matches.map(
+    mention=>{
+
+      const match=
+        mention.match(/<@!?(\d+)>/);
+
+      return match
+        ? match[1]
+        : '';
+
+    }
+  ).filter(Boolean);
+
+}
+
+
+/* =========================
+   التحقق من حالة العضو
+   ========================= */
+
+function getSpecialFinalRating(text){
+
+  const memberId=
+    getMemberId(text);
+
+  if(!memberId)
+    return null;
+
+
+  const newMembers=
+    document
+      .getElementById('newMembers')
+      .value;
+
+
+  const outOfService=
+    document
+      .getElementById('outOfService')
+      .value;
+
+
+  const newIds=
+    getMentionIds(newMembers);
+
+
+  const outIds=
+    getMentionIds(outOfService);
+
+
+  /*
+    خارج الخدمة النهائية له الأولوية
+  */
+
+  if(
+    outIds.includes(memberId)
+  ){
+
+    return '<@&1480638365937434808>';
+
+  }
+
+
+  /*
+    إذا كان العضو جديد
+  */
+
+  if(
+    newIds.includes(memberId)
+  ){
+
+    return 'جديد';
+
+  }
+
+
+  return null;
 
 }
 
@@ -1081,6 +1299,22 @@ function completeSurvey(){
       rating(total);
 
 
+    /*
+      التقييم النهائي الخاص:
+      عضو خارج الخدمة = الرتبة المطلوبة
+      عضو جديد = جديد
+      غير ذلك = التقييم الطبيعي
+    */
+
+    const specialFinal=
+      getSpecialFinalRating(inv);
+
+    const final=
+      specialFinal!==null
+        ? specialFinal
+        : base;
+
+
     let out=inv;
 
 
@@ -1122,7 +1356,7 @@ function completeSurvey(){
           'التقيم النهائي',
           'التقييم النهائي'
         ],
-        base
+        final
       );
 
 
@@ -1143,7 +1377,6 @@ function completeSurvey(){
         ' نقطة | البونص: '+
         bonus+
         ' نقطة.';
-
 
     return;
   }
@@ -1178,10 +1411,6 @@ function completeSurvey(){
     ];
 
 
-    /*
-      قراءة مجموع الساعات أولاً
-    */
-
     function parseHours(value){
 
       if(!value)
@@ -1192,11 +1421,6 @@ function completeSurvey(){
         .replace(/\s+/g,' ')
         .trim();
 
-
-      /*
-        الصيغة:
-        28 ساعة و 46 دقيقة
-      */
 
       let tm=value.match(
         /(\d+)\s*ساعة(?:\s*و)?\s*(\d+)\s*دقيقة/
@@ -1214,11 +1438,6 @@ function completeSurvey(){
       }
 
 
-      /*
-        الصيغة:
-        28:46
-      */
-
       tm=value.match(
         /^\s*(\d+)\s*:\s*(\d{1,2})\s*$/
       );
@@ -1235,11 +1454,6 @@ function completeSurvey(){
       }
 
 
-      /*
-        الصيغة:
-        28 ساعة
-      */
-
       tm=value.match(
         /(\d+)\s*ساعة/
       );
@@ -1248,10 +1462,6 @@ function completeSurvey(){
       if(tm)
         return parseInt(tm[1],10);
 
-
-      /*
-        الصيغة الرقمية العادية
-      */
 
       if(/\d/.test(value))
         return num(value);
@@ -1282,11 +1492,6 @@ function completeSurvey(){
 
     }
 
-
-    /*
-      البحث عن أي سطر يحتوي
-      تسجيل الدخول + ساعات
-    */
 
     const lines=
       text.split(/\r?\n/);
@@ -1326,11 +1531,6 @@ function completeSurvey(){
 
     }
 
-
-    /*
-      الاستبيانات القديمة
-      التي توزع الساعات.
-    */
 
     return(
       num(
@@ -1506,17 +1706,6 @@ function completeSurvey(){
     hours*30;
 
 
-  /*
-    إجمالي البوينتات =
-    نقاط الساعات
-    +
-    نقاط السيناريوهات
-    +
-    نقاط البونص
-    +
-    نقاط المسؤوليات
-  */
-
   const total=
     hourPoints+
     scenario+
@@ -1532,17 +1721,27 @@ function completeSurvey(){
     responsibilityRating(resp);
 
 
-  /*
-    التقييم النهائي:
-    إذا كانت المسؤوليات سيء فقط،
-    يتم كسر تقييم القسم مرتبة واحدة.
-  */
-
-  const final=
+  const calculatedFinal=
     finalRating(
       base,
       respRating
     );
+
+
+  /*
+    التقييم الخاص للأعضاء:
+    خارج الخدمة النهائية أو جديد
+    يتغلب فقط على التقييم النهائي.
+    جميع الحسبات السابقة تبقى كما هي.
+  */
+
+  const specialFinal=
+    getSpecialFinalRating(inv);
+
+  const final=
+    specialFinal!==null
+      ? specialFinal
+      : calculatedFinal;
 
 
   /* =========================
@@ -1656,3 +1855,4 @@ function completeSurvey(){
 
 </body>
 </html>
+
