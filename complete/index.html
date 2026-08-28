@@ -388,8 +388,6 @@ button .emoji{
     يحسب ويملأ الحقول المطلوبة فقط، مع إبقاء بقية الاستبيان كما هو.
   </div>
 
-  <!-- الأعضاء الجدد / خارج الخدمة -->
-
   <div class="member-options">
 
     <div class="card">
@@ -465,8 +463,6 @@ button .emoji{
 
   </div>
 
-
-  <!-- العضو الأول -->
 
   <div class="member-block" id="memberContainer">
 
@@ -546,8 +542,6 @@ button .emoji{
   </div>
 
 
-  <!-- زر إضافة عضو -->
-
   <button
     class="add-member"
     onclick="addMember()"
@@ -556,8 +550,6 @@ button .emoji{
     إضافة عضو آخر
   </button>
 
-
-  <!-- النتيجة -->
 
   <div class="card result">
 
@@ -1176,21 +1168,11 @@ function getSpecialFinalRating(
   const outIds=
     getMentionIds(outOfService);
 
-  /*
-    خارج الخدمة الإدارية له الأولوية
-  */
-
   if(outIds.includes(memberId)){
 
     return '<@&1480638365937434808>';
 
   }
-
-  /*
-    العضو الجديد:
-    يظهر "جديد" فقط إذا كان
-    تقييمه النهائي سيء.
-  */
 
   if(newIds.includes(memberId)){
 
@@ -1299,7 +1281,7 @@ function responsibilityRating(text){
       vals.push(2);
 
     }else if(
-      /سيء|سيئ/.test(v)
+      /^(?:سي|سيئ|سي\s*ء|سيء|سى)$/.test(v)
     ){
 
       vals.push(0);
@@ -1660,10 +1642,6 @@ function calculateSurvey(inv,resp){
     isMemberInventory(inv);
 
 
-  /* =========================
-     جرد الأعضاء
-  ========================= */
-
   if(memberInventory){
 
     const rawHours=
@@ -1825,10 +1803,6 @@ function calculateSurvey(inv,resp){
   }
 
 
-  /* =========================
-     الاستبيان العادي
-  ========================= */
-
   const rawHours=
     getLoginHours(inv);
 
@@ -1909,10 +1883,6 @@ function calculateSurvey(inv,resp){
     )*3;
 
 
-  /* =========================
-     البونص
-  ========================= */
-
   let bonus=0;
 
   if(hours>=16)
@@ -1941,10 +1911,6 @@ function calculateSurvey(inv,resp){
   )
     bonus+=50;
 
-
-  /* =========================
-     نقاط المسؤوليات
-  ========================= */
 
   const responsibilityPoints=
     responsibilityInteractionPoints(resp);
@@ -1981,10 +1947,6 @@ function calculateSurvey(inv,resp){
       ? specialFinal
       : calculatedFinal;
 
-
-  /* =========================
-     تعبئة النتيجة
-  ========================= */
 
   let out=inv;
 
@@ -2141,11 +2103,6 @@ function completeSurvey(){
 
     return;
   }
-
-  /*
-    فصل كل نتيجة عن النتيجة التي بعدها
-    بسطر فارغ.
-  */
 
   const finalOutput=
     results.join('\n\n');
