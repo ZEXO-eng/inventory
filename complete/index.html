@@ -1140,6 +1140,8 @@ function completeSurvey(){
         hourPoints+
         ' نقطة | نقاط السيناريوهات: '+
         scenario+
+        ' نقطة | البونص: '+
+        bonus+
         ' نقطة.';
 
 
@@ -1244,7 +1246,7 @@ function completeSurvey(){
 
 
       if(tm)
-        return parseInt(tm[1,],10);
+        return parseInt(tm[1],10);
 
 
       /*
@@ -1457,6 +1459,7 @@ function completeSurvey(){
 
   let bonus=0;
 
+
   if(hours>=16)
     bonus+=50;
 
@@ -1509,16 +1512,16 @@ function completeSurvey(){
     +
     نقاط السيناريوهات
     +
-    نقاط المسؤوليات
-    +
     نقاط البونص
+    +
+    نقاط المسؤوليات
   */
 
   const total=
     hourPoints+
     scenario+
-    responsibilityPoints+
-    bonus;
+    bonus+
+    responsibilityPoints;
 
 
   const base=
@@ -1621,6 +1624,10 @@ function completeSurvey(){
 
       'نقاط السيناريوهات: '+
       scenario+
+      ' نقطة | '+
+
+      'البونص: '+
+      bonus+
       ' نقطة | '+
 
       'نقاط المسؤوليات: '+
