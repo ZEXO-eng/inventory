@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>نظام مطابقة الاعضاء وتحديد الغائبين</title>
+
+  <style>
+    *{
+      box-sizing:border-box;
+      margin:0;
+      padding:0;
+    }
+
+    :root{
+      --bg:#050816;
+      --panel:rgba(13,20,34,.72);
+      --panel2:rgba(17,26,43,.62);
+      --line:rgba(148,163,184,.16);
+      --text:#f8fafc;
+      --muted:#8fa0b8;
+      --blue:#3b82f6;
+      --blue2:#2563eb;
+      --cyan:#06b6d4;
+      --orange:#f97316;
+      --green:#10b981;
+      --danger:#ef4444;
+    }
+
+    html,
+    body{
+      margin:0;
+      min-height:100%;
+      font-family:Tahoma,Arial,sans-serif;
+      background:
+        radial-gradient(circle at 12% 8%,#2563eb35,transparent 30%),
+        radial-gradient(circle at 88% 18%,#06b6d425,transparent 27%),
+        radial-gradient(circle at 50% 100%,#6366f120,transparent 35%),
+        linear-gradient(135deg,#050816,#0a1020 55%,#060b16);
+      color:var(--text);
+    }
+
+    body{
+      min-height:100vh;
+      overflow-x:hidden;
+      position:relative;
+    }
+
+    body::before,
+    body::after{
+      content:"";
+      position:fixed;
+      border-radius:50%;
+      filter:blur(85px);
+      pointer-events:none;
+      opacity:.2;
+      z-index:0;
+    }
+
+    body::before{
+      width:300px;
+      height:300px;
+      background:#2563eb;
+      top:-120px;
+      right:-90px;
+    }
+
+    body::after{
+      width:260px;
+      height:260px;
+      background:#06b6d4;
+      bottom:-120px;
+      left:-80px;
+    }
+
+    .wrapper{
+      width:min(1200px,calc(100% - 36px));
+      margin:0 auto;
+      padding:26px 0 24px;
+      position:relative;
+      z-index:1;
+    }
+
+    header{
+      text-align:center;
+      margin-bottom:18px;
+    }
+
+    header h1{
+      margin:0 0 7px;
+      font-size:clamp(30px,5vw,44px);
+      letter-spacing:-1px;
+      background:linear-gradient(90deg,#93c5fd,#fff,#67e8f9);
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+      -webkit-text-fill-color:transparent;
+      font-weight:800;
+    }
+
+    header p{
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.7;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+    }
+
+    .box{
+      position:relative;
+      background:
+        linear-gradient(145deg,rgba(17,27,48,.82),rgba(8,15,29,.68));
+      border:1px solid var(--line);
+      border-radius:20px;
+      padding:16px;
+      box-shadow:
+        0 25px 70px rgba(0,0,0,.4),
+        inset 0 1px 0 rgba(255,255,255,.045);
+      backdrop-filter:blur(18px);
+      -webkit-backdrop-filter:blur(18px);
+      overflow:hidden;
+    }
+
+    .box::before{
+      content:"";
+      position:absolute;
+      width:190px;
+      height:190px;
+      top:-90px;
+      right:-70px;
+      border-radius:50%;
+      background:#2563eb18;
+      filter:blur(35px);
+      pointer-events:none;
+    }
+
+    .box label{
+      display:block;
+      font-size:13px;
+      font-weight:800;
+      margin-bottom:8px;
+      color:#cbd5e1;
+      position:relative;
+      z-index:1;
+    }
+
+    textarea{
+      width:100%;
+      height:340px;
+      resize:vertical;
+      background:
+        linear-gradient(145deg,rgba(3,9,22,.82),rgba(10,18,34,.72));
+      color:#f8fafc;
+      border:1px solid rgba(148,163,184,.15);
+      border-radius:14px;
+      padding:13px;
+      line-height:1.8;
+      font-family:Consolas,Tahoma,monospace;
+      font-size:14px;
+      direction:ltr;
+      text-align:left;
+      outline:none;
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.025),
+        0 10px 30px rgba(0,0,0,.18);
+      transition:.25s ease;
+      position:relative;
+      z-index:1;
+    }
+
+    textarea::placeholder{
+      color:#64748b;
+    }
+
+    textarea:focus{
+      border-color:rgba(59,130,246,.65);
+      box-shadow:
+        0 0 0 3px rgba(59,130,246,.09),
+        0 15px 40px rgba(0,0,0,.25);
+    }
+
+    .full-width-box{
+      margin-top:12px;
+    }
+
+    .full-width-box textarea{
+      height:200px;
+      border-color:rgba(239,68,68,.25);
+    }
+
+    .full-width-box textarea:focus{
+      border-color:rgba(239,68,68,.55);
+      box-shadow:
+        0 0 0 3px rgba(239,68,68,.08),
+        0 15px 40px rgba(0,0,0,.25);
+    }
+
+    .stats-bar{
+      margin-top:8px;
+      min-height:38px;
+      background:
+        linear-gradient(145deg,rgba(3,9,22,.65),rgba(10,18,34,.55));
+      border:1px solid rgba(148,163,184,.11);
+      border-radius:11px;
+      padding:9px 12px;
+      font-size:13px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      position:relative;
+      z-index:1;
+    }
+
+    .stats-count{
+      color:#93c5fd;
+      font-weight:700;
+    }
+
+    .missing-count{
+      color:#f87171;
+      font-weight:700;
+    }
+
+    .actions{
+      display:flex;
+      gap:8px;
+      margin-top:12px;
+      justify-content:center;
+      flex-wrap:wrap;
+    }
+
+    button.action-btn{
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:10px;
+      padding:10px 17px;
+      font-weight:700;
+      cursor:pointer;
+      color:white;
+      transition:.22s ease;
+      font-family:Tahoma,Arial,sans-serif;
+      background:linear-gradient(135deg,#f97316,#ea580c);
+      box-shadow:0 10px 30px rgba(249,115,22,.2);
+    }
+
+    button.action-btn:hover{
+      transform:translateY(-2px);
+      filter:brightness(1.08);
+    }
+
+    button.secondary{
+      background:linear-gradient(135deg,#7c3aed,#6d28d9);
+      box-shadow:0 10px 28px rgba(124,58,237,.18);
+    }
+
+    button.secondary:hover{
+      transform:translateY(-2px);
+      filter:brightness(1.08);
+    }
+
+    .toast{
+      position:fixed;
+      bottom:20px;
+      left:50%;
+      transform:translateX(-50%) translateY(100px);
+      background:linear-gradient(135deg,#059669,#047857);
+      color:white;
+      padding:11px 20px;
+      border-radius:10px;
+      font-size:13px;
+      font-weight:700;
+      opacity:0;
+      transition:all .3s ease;
+      box-shadow:0 12px 35px rgba(5,150,105,.25);
+      z-index:100;
+      border:1px solid rgba(255,255,255,.08);
+    }
+
+    .toast.show{
+      transform:translateX(-50%) translateY(0);
+      opacity:1;
+    }
+
+    @media(max-width:850px){
+      .grid{
+        grid-template-columns:1fr;
+        gap:10px;
+      }
+    }
+
+    @media(max-width:600px){
+      .wrapper{
+        width:min(100% - 24px,620px);
+        padding-top:20px;
+      }
+
+      header h1{
+        font-size:30px;
+      }
+
+      .box{
+        padding:13px;
+        border-radius:17px;
+      }
+
+      .actions{
+        flex-direction:column;
+      }
+
+      button.action-btn{
+        width:100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="wrapper">
+
+    <header>
+      <h1>نظام مطابقة الأعضاء واستخراج الغائبين تلقائياً</h1>
+
+      <p>
+        يتم استثناء عناوين الرتب تلقائياً والتركيز على يوزرات الأعضاء فقط
+      </p>
+    </header>
+
+
+    <div class="grid">
+
+      <div class="box">
+
+        <label>
+          1. قائمة اعضاء القسم الكاملة (شاملة الرواتب والعناوين):
+        </label>
+
+        <textarea
+          id="allMembers"
+          placeholder="الصق القائمة هنا..."
+        ></textarea>
+
+        <div class="stats-bar">
+          <div
+            id="totalMembersCount"
+            class="stats-count"
+          >
+            عدد الأعضاء الفعليين: 0
+          </div>
+        </div>
+
+      </div>
+
+
+      <div class="box">
+
+        <label>
+          2. استبيان الجرد النهائي للقسم:
+        </label>
+
+        <textarea
+          id="auditedMembers"
+          placeholder="الصق الجرد المنسق هنا..."
+        ></textarea>
+
+        <div class="stats-bar">
+          <div
+            id="auditedCount"
+            class="stats-count"
+          >
+            الموجودين بالجرد: 0
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div class="box full-width-box">
+
+      <label style="color:#f87171;">
+        3. قائمة الأشخاص غير المتواجدين (الذين لم يتم جرد تقييمهم):
+      </label>
+
+      <textarea
+        id="missingMembers"
+        placeholder="ستظهر يوزرات الأشخاص الغائبين هنا تلقائياً..."
+        readonly
+      ></textarea>
+
+      <div class="stats-bar">
+
+        <div
+          id="missingCount"
+          class="missing-count"
+        >
+          إجمالي الغير متواجدين: 0
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div class="actions">
+
+      <button
+        class="action-btn"
+        onclick="compareLists()"
+      >
+        مطابقة وفحص
+      </button>
+
+      <button
+        class="action-btn secondary"
+        onclick="copyResult('missingMembers')"
+      >
+        نسخ قائمة الغائبين
+      </button>
+
+      <button
+        class="action-btn secondary"
+        onclick="clearAll()"
+      >
+        مسح الكل
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <div id="toast" class="toast">
+    تم النسخ بنجاح!
+  </div>
+
+
+  <script>
+
+    function extractMemberIdentifier(rawText) {
+      if (!rawText) return null;
+
+      let text = rawText.replace(/[\u200B-\u200D\uFEFF\u200F]/g, '').trim();
+      if (!text) return null;
+
+      if (
+        text.startsWith('➜') ||
+        text.includes('مسؤول') ||
+        text.includes('مشرف') ||
+        text.includes('قائمه اعضاء') ||
+        text.startsWith('---')
+      ) {
+        return null;
+      }
+
+      let idMentionMatch = text.match(/<@!?([0-9]{10,20})>/);
+
+      if (idMentionMatch) {
+        const id = idMentionMatch[1];
+
+        return {
+          key: id,
+          mention: `<@${id}>`,
+          type: 'id'
+        };
+      }
+
+      let usernameMentionMatch =
+        text.match(/@([a-zA-Z0-9_\.-]+)/);
+
+      if (usernameMentionMatch) {
+        const username =
+          usernameMentionMatch[1]
+            .toLowerCase()
+            .replace(/\.$/, '');
+
+        return {
+          key: username,
+          mention: `@${username}`,
+          type: 'username'
+        };
+      }
+
+      let idOnlyMatch =
+        text.match(/(?<!\w)([0-9]{10,20})(?!\w)/);
+
+      if (idOnlyMatch) {
+        const id = idOnlyMatch[1];
+
+        return {
+          key: id,
+          mention: `<@${id}>`,
+          type: 'id'
+        };
+      }
+
+      let usernameOnlyMatch =
+        text.match(/^([a-zA-Z0-9_\.-]{3,32})$/);
+
+      if (usernameOnlyMatch) {
+        const username =
+          usernameOnlyMatch[1]
+            .toLowerCase()
+            .replace(/\.$/, '');
+
+        return {
+          key: username,
+          mention: `@${username}`,
+          type: 'username'
+        };
+      }
+
+      return null;
+    }
+
+
+    function compareLists() {
+
+      const allText =
+        document.getElementById('allMembers').value;
+
+      const auditedText =
+        document.getElementById('auditedMembers').value;
+
+
+      if (!allText.trim()) {
+
+        document.getElementById('missingMembers').value = '';
+
+        document.getElementById('totalMembersCount').textContent =
+          'عدد الأعضاء الفعليين: 0';
+
+        document.getElementById('auditedCount').textContent =
+          'الموجودين بالجرد: 0';
+
+        document.getElementById('missingCount').textContent =
+          'إجمالي الغير متواجدين: 0';
+
+        return;
+      }
+
+
+      const lines =
+        allText.split(/\r?\n/);
+
+      let allMembersMap = new Map();
+
+
+      lines.forEach(line => {
+
+        let member =
+          extractMemberIdentifier(line);
+
+        if (member) {
+          allMembersMap.set(
+            member.key,
+            member.mention
+          );
+        }
+
+      });
+
+
+      let auditedUsers = new Set();
+
+      const auditedLines =
+        auditedText.split(/\r?\n/);
+
+
+      auditedLines.forEach(line => {
+
+        let member =
+          extractMemberIdentifier(line);
+
+        if (member) {
+          auditedUsers.add(member.key);
+        }
+
+      });
+
+
+      let missingList = [];
+
+
+      allMembersMap.forEach(
+        (formattedMention, memberKey) => {
+
+          if (!auditedUsers.has(memberKey)) {
+            missingList.push(formattedMention);
+          }
+
+        }
+      );
+
+
+      document.getElementById('missingMembers').value =
+        missingList.join('\n');
+
+
+      document.getElementById('totalMembersCount').textContent =
+        `عدد الأعضاء الفعليين: ${allMembersMap.size}`;
+
+
+      document.getElementById('auditedCount').textContent =
+        `الموجودين بالجرد: ${allMembersMap.size - missingList.length}`;
+
+
+      document.getElementById('missingCount').textContent =
+        `إجمالي الغير متواجدين: ${missingList.length}`;
+    }
+
+
+    function copyResult(elementId) {
+
+      const output =
+        document.getElementById(elementId);
+
+      if (!output.value) return;
+
+      output.select();
+
+      navigator.clipboard.writeText(output.value);
+
+      showToast();
+    }
+
+
+    function clearAll() {
+
+      document.getElementById('allMembers').value = '';
+
+      document.getElementById('auditedMembers').value = '';
+
+      document.getElementById('missingMembers').value = '';
+
+      document.getElementById('totalMembersCount').textContent =
+        'عدد الأعضاء الفعليين: 0';
+
+      document.getElementById('auditedCount').textContent =
+        'الموجودين بالجرد: 0';
+
+      document.getElementById('missingCount').textContent =
+        'إجمالي الغير متواجدين: 0';
+    }
+
+
+    function showToast() {
+
+      const toast =
+        document.getElementById('toast');
+
+      toast.classList.add('show');
+
+      setTimeout(
+        () => toast.classList.remove('show'),
+        2000
+      );
+    }
+
+
+    document
+      .getElementById('allMembers')
+      .addEventListener(
+        'input',
+        compareLists
+      );
+
+
+    document
+      .getElementById('auditedMembers')
+      .addEventListener(
+        'input',
+        compareLists
+      );
+
+  </script>
+
+</body>
+</html>
