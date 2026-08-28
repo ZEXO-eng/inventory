@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>مُكمل استبيانات جرد المسؤولين</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#0f172a;color:#e5e7eb;font-family:Tahoma,Arial,sans-serif}
+.wrap{max-width:1200px;margin:0 auto;padding:28px}
+h1{margin:0 0 8px;font-size:28px}
+.sub{color:#94a3b8;margin-bottom:24px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.card{background:#111827;border:1px solid #263244;border-radius:16px;padding:18px;box-shadow:0 8px 30px #0003}
+label{display:block;font-weight:700;margin-bottom:10px}
+textarea{width:100%;min-height:360px;resize:vertical;background:#0b1220;color:#f8fafc;border:1px solid #334155;border-radius:10px;padding:14px;line-height:1.8;font-family:Consolas,Tahoma,monospace;font-size:14px;direction:rtl}
+.buttons{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+button{border:0;border-radius:10px;padding:11px 16px;font-weight:700;cursor:pointer;color:white;background:#2563eb}
+button:hover{filter:brightness(1.12)}
+.paste{background:#059669}.clear{background:#dc2626}.copy{background:#7c3aed}
+.main{background:#ea580c;font-size:16px}
+.status{margin-top:10px;min-height:22px;color:#93c5fd;font-size:13px}
+.result{min-height:400px;margin-top:18px}
+.note{font-size:13px;color:#94a3b8;line-height:1.7}
+@media(max-width:850px){.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>📋 مُكمل استبيانات جرد المسؤولين</h1>
+  <div class="sub">يحسب ويملأ الحقول المطلوبة فقط، مع إبقاء بقية الاستبيان كما هو.</div>
+
+  <div class="grid">
+    <div class="card">
+      <label>استبيان الجرد الأساسي</label>
+      <textarea id="inventory" placeholder="الصق استبيان الجرد الأساسي هنا..."></textarea>
+      <div class="buttons">
+        <button class="paste" onclick="pasteInto('inventory','status1')">📋 لصق الاستبيان هنا</button>
+        <button class="clear" onclick="clearOne('inventory')">مسح</button>
+      </div>
+      <div id="status1" class="status"></div>
+    </div>
+
+    <div class="card">
+      <label>استبيان تقييم المسؤوليات</label>
+      <textarea id="responsibilities" placeholder="الصق استبيان تقييم المسؤوليات هنا..."></textarea>
+      <div class="buttons">
+        <button class="paste" onclick="pasteInto('responsibilities','status2')">📋 لصق تقييم المسؤوليات هنا</button>
+        <button class="clear" onclick="clearOne('responsibilities')">مسح</button>
+      </div>
+      <div id="status2" class="status"></div>
+    </div>
+  </div>
+
+  <div class="card result">
+    <label>النتيجة</label>
+    <textarea id="output" readonly placeholder="ستظهر النتيجة هنا..."></textarea>
+    <div class="buttons">
+      <button class="main" onclick="completeSurvey()">✅ إكمال الاستبيان</button>
+      <button class="copy" onclick="copyResult()">📄 نسخ النتيجة</button>
+      <button class="clear" onclick="clearAll()">🗑️ مسح الكل</button>
+    </div>
+    <div id="status3" class="status"></div>
+    <div class="note">
+       شرط البونص يُطبّق حسب النص: 16 ساعة و400 صورة.
+    </div>
+  </div>
+</div>
+
+<script>
+document.querySelectorAll('textarea').forEach(el=>{
+  el.addEventListener('paste',()=>setTimeout(()=>{},0));
+});
+
+async function pasteInto(id,statusId){
+  const box=document.getElementById(id), status=document.getElementById(statusId);
+  try{
+    const text=await navigator.clipboard.readText();
+    if(!text){ status.textContent='⚠️ الحافظة فارغة.'; return; }
+    box.value=text;
+    box.dispatchEvent(new Event('input',{bubbles:true}));
+    status.textContent='✅ تم اللصق من الحافظة.';
+  }catch(e){
+    // Fallback that still provides a native paste UI when clipboard permission is unavailable.
+    box.focus();
+    status.textContent='⚠️ المتصفح منع القراءة المباشرة للحافظة. اضغط Ctrl+V هنا للسماح باللصق.';
+  }
+}
+function clearOne(id){document.getElementById(id).value='';}
+function clearAll(){
+  ['inventory','responsibilities','output'].forEach(id=>document.getElementById(id).value='');
+  ['status1','status2','status3'].forEach(id=>document.getElementById(id).textContent='');
+}
+async function copyResult(){
+  const out=document.getElementById('output').value;
+  if(!out)return;
+  try{await navigator.clipboard.writeText(out);document.getElementById('status3').textContent='✅ تم نسخ النتيجة.';}
+  catch(e){document.getElementById('output').focus();document.execCommand('selectAll');document.execCommand('copy');document.getElementById('status3').textContent='✅ تم نسخ النتيجة.';}
+}
+
+function num(s){ const m=String(s??'').replace(/[٠-٩]/g,d=>String('٠١٢٣٤٥٦٧٨٩'.indexOf(d))).match(/-?\d+(?:[.,]\d+)?/); return m?parseFloat(m[0].replace(',','.')):0; }
+function normalize(s){return String(s||'').replace(/[٠-٩]/g,d=>String('٠١٢٣٤٥٦٧٨٩'.indexOf(d))).replace(/ي/g,'ي').trim();}
+function getLine(text,label){
+  const lines=text.split(/\r?\n/);
+  const target=normalize(label);
+  for(const line of lines){
+    const n=normalize(line);
+    if(n.includes(target)){
+      const p=line.indexOf(':');
+      return p>=0?line.slice(p+1).trim():'';
+    }
+  }
+  return '';
+}
+function replaceField(text,label,value){
+  const re=new RegExp('(^[ \\t]*'+label.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'[ \\t]*:)[^\\r\\n]*','mi');
+  if(re.test(text)) return text.replace(re,'$1 '+value);
+  return text;
+}
+function replaceAny(text, labels, value){
+  for(const label of labels){
+    const before=text;
+    text=replaceField(text,label,value);
+    if(text!==before)return text;
+  }
+  return text;
+}
+function findTriple(text,label){
+  const v=getLine(text,label);
+  const a=v.match(/\d+/g);
+  return a&&a.length>=3?[+a[0],+a[1],+a[2]]:[0,0,0];
+}
+function rating(points){
+  if(points<=150)return 'سيء';
+  if(points<=250)return 'جيد جداً';
+  if(points<=400)return 'ممتاز';
+  if(points>=450)return 'ممتاز جداً';
+  return 'غير محدد';
+}
+const rank={ 'سيء':0,'جيد جداً':1,'ممتاز':2,'ممتاز جداً':3 };
+const rankName=['سيء','جيد جداً','ممتاز','ممتاز جداً'];
+
+function responsibilityRating(text){
+  // تقييم المسؤوليات:
+  // - مراقبة اللوقات مستثناة بالكامل.
+  // - "لا يوجد" لا يدخل في الحساب.
+  // - الرقم لا يهم، المهم هو نص التقييم.
+  // - نأخذ أعلى تقييم.
+  // - كل "سيء" يكسر مرتبة واحدة من أعلى تقييم.
+  const labels=[
+    'مسؤول تدقيق الصور',
+    'مسؤول الملاحظات',
+    'مسؤول الاجازات',
+    'مسؤول الإجازات',
+    'مسؤول التحذيرات'
+  ];
+
+  let vals=[];
+
+  for(const l of labels){
+    const v=normalize(getLine(text,l))
+      .replace(/\s+/g,' ')
+      .trim();
+
+    if(!v || v.includes('لا يوجد')) continue;
+
+    if(/ممتاز\s*جداً|ممتاز\s*جدا/.test(v)){
+      vals.push(3);
+    }else if(/جيد\s*جداً|جيد\s*جدا/.test(v)){
+      vals.push(1);
+    }else if(/ممتاز/.test(v)){
+      vals.push(2);
+    }else if(/سيء|سيئ/.test(v)){
+      vals.push(0);
+    }
+  }
+
+  if(!vals.length)return 'غير محدد';
+
+  const highest=Math.max(...vals);
+  const badCount=vals.filter(x=>x===0).length;
+
+  // كل سيء = نزول مرتبة واحدة.
+  return rankName[Math.max(0,highest-badCount)];
+}
+
+function finalRating(base,respons){
+  // التقييم النهائي:
+  // يبدأ من تقييم إجمالي البوينتات.
+  // إذا كان تقييم المسؤوليات أقل، ينزل التقييم النهائي مرتبة واحدة فقط
+  // لكل "سيء" موجود في المسؤوليات، مع تطبيق نفس قاعدة تقييم المسؤوليات.
+  //
+  // ملاحظة: responsibilityRating() أعاد أصلًا النتيجة بعد كسر المراتب،
+  // لذلك نقارن النتيجة النهائية الناتجة مع تقييم البوينتات.
+  if(!(base in rank) || !(respons in rank)) return base;
+
+  if(rank[respons] < rank[base]){
+    return rankName[Math.max(0,rank[base]-1)];
+  }
+
+  return base;
+}
+
+
+function responsibilityInteractionPoints(text){
+  // نقاط التفاعل في المسؤوليات:
+  // تُضاف فقط إذا كان تقييم المسؤولية "ممتاز" أو "ممتاز جداً".
+  // الأرقام الموجودة بجانب التقييم لا تؤثر على القرار.
+  const bonuses=[
+    {labels:['مسؤول الاجازات','مسؤول الإجازات'], points:50},
+    {labels:['مسؤول مراقبة اللوقات'], points:75},
+    {labels:['مسؤول الملاحظات'], points:75},
+    {labels:['مسؤول تدقيق الصور'], points:75},
+    {labels:['مسؤول دفتر الحضور'], points:100}
+  ];
+
+  let total=0;
+
+  for(const item of bonuses){
+    let found=false;
+
+    for(const label of item.labels){
+      const value=normalize(getLine(text,label))
+        .replace(/\s+/g,' ')
+        .trim();
+
+      if(!value || value.includes('لا يوجد') || value.includes('لايوجد')) continue;
+
+      // يحصل على النقاط إذا كان التقييم ممتاز أو ممتاز جداً فقط.
+      // "ممتاز جداً" يتضمن كلمة "ممتاز"، لذلك نفحصه أولاً.
+      if(/ممتاز\s*جداً|ممتاز\s*جدا/.test(value) || /ممتاز/.test(value)){
+        found=true;
+        break;
+      }
+    }
+
+    if(found) total+=item.points;
+  }
+
+  return total;
+}
+
+function isMemberInventory(text){
+  const n=normalize(text).replace(/\s+/g,' ');
+  return /جرد\s*الاعضاء|جرد\s*الأعضاء/.test(n)
+    || /عدد\s*ساعات\s*مراقب\s*سرقات/.test(n);
+}
+
+function getMemberRobberyHours(text){
+  const value=getLine(text,'عدد ساعات مراقب سرقات');
+  const tm=value.match(/^\s*(\d+)\s*:\s*(\d{1,2})\s*$/);
+  if(tm) return parseInt(tm[1],10) + parseInt(tm[2],10)/60;
+  return num(value);
+}
+
+function completeSurvey(){
+  const inv=document.getElementById('inventory').value;
+  const resp=document.getElementById('responsibilities').value;
+  if(!inv.trim()){document.getElementById('status3').textContent='⚠️ أدخل استبيان الجرد الأساسي أولاً.';return;}
+
+  const memberInventory=isMemberInventory(inv);
+
+  // جرد الأعضاء لا يعتمد على استبيان تقييم المسؤوليات.
+  if(memberInventory){
+    const rawHours=getMemberRobberyHours(inv);
+    const hours=Math.round(rawHours);
+
+    const jew=findTriple(inv,'عدد مراقبة المجوهرات + البنوك + اليخت');
+    const official=findTriple(inv,'عدد مراقبة سيناريوهات البنك المركزي + الميترو + الاستوديو');
+    const shops=findTriple(inv,'عدد مراقبة سرقة المنزل + بقالة + مصرف');
+
+    // نفس قواعد نقاط السيناريوهات الموجودة أصلًا في الكود.
+    let scenario=
+      official.reduce((a,b)=>a+b,0)*6
+      + jew.reduce((a,b)=>a+b,0)*5
+      + shops.reduce((a,b)=>a+b,0)*3;
+
+    // نقاط الصور: نفس قاعدة الجرد الأصلية (400 صورة = 50 نقطة).
+    const imgLine =
+      getLine(inv,'هل أكمل مراقبة 400 صورة خلال الأسبوع؟') ||
+      getLine(inv,'هل أكمل مراقبة 300 صورة خلال الأسبوع؟') ||
+      getLine(inv,'مجموع الصور للسرقات');
+
+    const imgCount=num(imgLine);
+    if(imgCount>=400 || /400/.test(imgLine)) scenario+=50;
+
+    const hourPoints=hours*30;
+    const total=hourPoints+scenario;
+    const base=rating(total);
+
+    let out=inv;
+    out=replaceAny(out,['اجمالي نقاط السيناريوهات','إجمالي نقاط السيناريوهات'],scenario);
+    out=replaceAny(out,['مجموع البوينتات','اجمالي البوينتات','إجمالي البوينتات'],total);
+    out=replaceAny(out,['التقييم'],base);
+    out=replaceAny(out,['التقيم النهائي','التقييم النهائي'],base);
+
+    document.getElementById('output').value=out;
+    document.getElementById('status3').textContent=
+      '✅ تم إكمال جرد الأعضاء. الساعات: '+hours+
+      ' ساعة = '+hourPoints+' نقطة | بدون نقاط أو خصومات المسؤوليات.';
+    return;
+  }
+
+  // استخراج ساعات تسجيل الدخول.
+  // النظام: كل ساعة تسجيل دخول = 30 نقطة.
+  // ندعم أكثر من صيغة لاسم خانة الساعات، وإذا كانت الساعات موزعة
+  // على مراقب سرقات/سيناريوهات/عام نجمعها أيضًا.
+  function getLoginHours(text){
+    const directLabels=[
+      'مجموع الساعات',
+      'اجمالي ساعات تسجيل الدخول',
+      'إجمالي ساعات تسجيل الدخول',
+      'مجموع ساعات تسجيل الدخول',
+      'عدد ساعات تسجيل الدخول',
+      'ساعات تسجيل الدخول',
+      'ساعات التسجيل',
+      'اجمالي الساعات',
+      'إجمالي الساعات'
+    ];
+
+    // قراءة خانة مجموع الساعات أولاً.
+    for(const label of directLabels){
+      const value=getLine(text,label);
+      if(value!==''){
+        // صيغة 7:01 = 7 ساعات و01 دقيقة.
+        const tm=value.match(/^\s*(\d+)\s*:\s*(\d{1,2})\s*$/);
+        if(tm){
+          const h=parseInt(tm[1],10);
+          const m=parseInt(tm[2],10);
+          return h + (m/60);
+        }
+
+        // إذا كانت الخانة تحتوي "7 ساعات" أو رقمًا عشريًا.
+        if(/\d/.test(value)) return num(value);
+      }
+    }
+
+    // دعم سطر يحتوي على "تسجيل الدخول" و"ساعات".
+    const lines=text.split(/\r?\n/);
+    for(const line of lines){
+      const n=normalize(line).replace(/\s+/g,' ');
+      if(/تسجيل\s*الدخول/.test(n) && /ساع/.test(n) && /\d/.test(n)){
+        const p=line.indexOf(':');
+        const value=p>=0 ? line.slice(p+1).trim() : line.trim();
+
+        const tm=value.match(/^\s*(\d+)\s*:\s*(\d{1,2})\s*$/);
+        if(tm){
+          return parseInt(tm[1],10) + parseInt(tm[2],10)/60;
+        }
+
+        return num(value);
+      }
+    }
+
+    // الاستبيانات القديمة التي توزع الساعات على ثلاث خانات.
+    return num(getLine(text,'ساعات مراقب سرقات'))
+      +num(getLine(text,'ساعات مراقب سيناريوهات'))
+      +num(getLine(text,'ساعات مراقب عام'));
+  }
+
+  const rawHours=getLoginHours(inv);
+  // تقريب الساعات لأقرب ساعة:
+  // 1:31 => 2:00 ، 2:29 => 2:00 ، 2:30 => 3:00
+  // أي أن الدقائق لا تُحسب كنسبة من الساعة، بل تحدد فقط التقريب.
+  const hours=Math.round(rawHours);
+  const shared=num(getLine(inv,'عدد مراقبة السيناريو المشترك'));
+  const jew=findTriple(inv,'عدد مراقبة المجوهرات + البنوك + اليخت');
+  const official=findTriple(inv,'عدد مراقبة سيناريوهات البنك المركزي + الميترو + الاستوديو');
+  const unsafe=num(getLine(inv,'السرقات بالمناطق غير الآمنة')) || num(getLine(inv,'عدد مراقبة السرقات بالمناطق غير الآمنة'));
+  const shops=findTriple(inv,'عدد مراقبة سرقة المنزل + بقالة + مصرف');
+
+  // نقاط السيناريوهات فقط (بدون نقاط ساعات الدخول)
+  let scenario=shared*8
+    + official.reduce((a,b)=>a+b,0)*6
+    + jew.reduce((a,b)=>a+b,0)*5
+    + unsafe*4
+    + shops.reduce((a,b)=>a+b,0)*3;
+
+  // بونص الجرد: 16 ساعة مراقبة خلال الأسبوع = 50 نقطة إضافية
+  if(hours>=16) scenario+=50;
+
+  // بونص الصور: إكمال 400 صورة = 50 نقطة إضافية
+  const imgLine =
+    getLine(inv,'هل أكمل مراقبة 400 صورة خلال الأسبوع؟') ||
+    getLine(inv,'هل أكمل مراقبة 300 صورة خلال الأسبوع؟');
+  const imgCount=num(imgLine);
+  if(imgCount>=400 || /400/.test(imgLine)) scenario+=50;
+
+  // نقاط التفاعل في المسؤوليات:
+  // تُحسب بشكل مستقل وتُضاف إلى إجمالي البوينتات فقط.
+  const responsibilityPoints=responsibilityInteractionPoints(resp);
+
+  // إجمالي البوينتات = نقاط الساعات + نقاط السيناريوهات + نقاط تفاعل المسؤوليات
+  // الساعات بعد التقريب لأقرب ساعة، وكل ساعة = 30 نقطة.
+  const hourPoints=hours*30;
+  const total=hourPoints+scenario+responsibilityPoints;
+  const base=rating(total);
+  const respRating=responsibilityRating(resp);
+  const final=finalRating(base,respRating);
+
+  let out=inv;
+  out=replaceAny(out,['اجمالي نقاط السيناريوهات','إجمالي نقاط السيناريوهات'],scenario);
+  out=replaceAny(out,['اجمالي البوينتات','إجمالي البوينتات'],total);
+  out=replaceAny(out,['التقييم'],base);
+  out=replaceAny(out,['تقيم المسؤوليات','تقييم المسؤوليات'],respRating);
+  out=replaceAny(out,['التقيم النهائي','التقييم النهائي'],final);
+
+  document.getElementById('output').value=out;
+  document.getElementById('status3').textContent=
+    '✅ تم إكمال الاستبيان. الساعات: '+hours+
+    ' ساعة = '+hourPoints+' نقطة | نقاط تفاعل المسؤوليات: '+
+    responsibilityPoints+' نقطة.';
+}
+</script>
+</body>
+</html>
