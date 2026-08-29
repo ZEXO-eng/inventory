@@ -223,9 +223,38 @@ button{
   font-family:Tahoma,Arial,sans-serif;
 }
 
+button{
+  position:relative;
+  overflow:hidden;
+  isolation:isolate;
+}
+
 button:hover{
   transform:translateY(-2px);
-  filter:brightness(1.08);
+  filter:brightness(1.18);
+  box-shadow:
+    0 0 14px var(--glow),
+    0 0 28px var(--glow),
+    0 10px 32px rgba(0,0,0,.28);
+}
+
+button::after{
+  content:"";
+  position:absolute;
+  inset:-2px;
+  border-radius:inherit;
+  pointer-events:none;
+  opacity:0;
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,.18),
+    0 0 18px var(--glow),
+    0 0 36px var(--glow);
+  transition:opacity .22s ease;
+  z-index:-1;
+}
+
+button:hover::after{
+  opacity:.9;
 }
 
 button .emoji{
@@ -239,27 +268,32 @@ button .emoji{
 }
 
 .paste{
+  --glow:#10b981;
   background:linear-gradient(135deg,#059669,#047857);
   box-shadow:0 10px 28px rgba(5,150,105,.18);
 }
 
 .clear{
+  --glow:#ef4444;
   background:rgba(220,38,38,.82);
   box-shadow:0 10px 28px rgba(220,38,38,.13);
 }
 
 .copy{
+  --glow:#a855f7;
   background:linear-gradient(135deg,#7c3aed,#6d28d9);
   box-shadow:0 10px 28px rgba(124,58,237,.18);
 }
 
 .main{
+  --glow:#f97316;
   background:linear-gradient(135deg,#f97316,#ea580c);
   font-size:15px;
   box-shadow:0 10px 30px rgba(249,115,22,.2);
 }
 
 .add-member{
+  --glow:#3b82f6;
   width:100%;
   margin:12px 0;
   padding:14px 18px;
@@ -270,6 +304,7 @@ button .emoji{
 }
 
 .delete-member{
+  --glow:#ef4444;
   background:rgba(220,38,38,.82);
   box-shadow:0 8px 22px rgba(220,38,38,.12);
 }
@@ -332,6 +367,14 @@ button .emoji{
   padding:20px;
 }
 
+#status3{
+  display:none;
+}
+
+#pointsReason{
+  white-space:pre-line;
+}
+
 @media(max-width:850px){
   .grid,
   .member-options{
@@ -372,6 +415,59 @@ button .emoji{
     width:100%;
   }
 }
+
+/* =========================
+   تأثيرات الأزرار الحديثة
+   ========================= */
+button{
+  position:relative;
+  overflow:hidden;
+  isolation:isolate;
+  transition:transform .22s cubic-bezier(.2,.8,.2,1),
+             filter .22s ease,
+             box-shadow .22s ease;
+}
+
+button::after{
+  content:"";
+  position:absolute;
+  width:18px;
+  height:18px;
+  left:var(--ripple-x,50%);
+  top:var(--ripple-y,50%);
+  transform:translate(-50%,-50%) scale(0);
+  border-radius:50%;
+  background:rgba(255,255,255,.32);
+  pointer-events:none;
+  z-index:-1;
+}
+
+button.ripple::after{
+  animation:buttonRipple .55s ease-out;
+}
+
+@keyframes buttonRipple{
+  0%{transform:translate(-50%,-50%) scale(0);opacity:.7}
+  100%{transform:translate(-50%,-50%) scale(16);opacity:0}
+}
+
+button:hover{
+  transform:translateY(-2px) scale(1.015);
+  filter:brightness(1.1);
+}
+
+button:active{
+  transform:translateY(0) scale(.97);
+  filter:brightness(1.04);
+}
+
+button:focus-visible{
+  outline:none;
+  box-shadow:
+    0 0 0 3px rgba(96,165,250,.18),
+    0 0 24px rgba(59,130,246,.28);
+}
+
 </style>
 </head>
 
@@ -458,6 +554,78 @@ button .emoji{
       </div>
 
       <div id="statusOut" class="status"></div>
+
+    </div>
+
+
+    <div class="card">
+
+      <label>مشرفين المسؤوليات ( يحصلون على 200 بوينت )</label>
+
+      <textarea
+        id="responsibilitySupervisors"
+        placeholder="اكتب منشنات مشرفين المسؤوليات هنا...
+مثال:
+<@123456789>
+<@987654321>"
+      ></textarea>
+
+      <div class="buttons">
+
+        <button
+          class="paste"
+          onclick="pasteInto('responsibilitySupervisors','statusResponsibilitySupervisors')"
+        >
+          <span class="emoji">📋</span>
+          لصق المنشنات هنا
+        </button>
+
+        <button
+          class="clear"
+          onclick="clearOne('responsibilitySupervisors')"
+        >
+          مسح
+        </button>
+
+      </div>
+
+      <div id="statusResponsibilitySupervisors" class="status"></div>
+
+    </div>
+
+
+    <div class="card">
+
+      <label>مسؤولين الجرد ( يحصلون على 150 بوينت )</label>
+
+      <textarea
+        id="inventoryManagers"
+        placeholder="اكتب منشنات مسؤولين الجرد هنا...
+مثال:
+<@123456789>
+<@987654321>"
+      ></textarea>
+
+      <div class="buttons">
+
+        <button
+          class="paste"
+          onclick="pasteInto('inventoryManagers','statusInventoryManagers')"
+        >
+          <span class="emoji">📋</span>
+          لصق المنشنات هنا
+        </button>
+
+        <button
+          class="clear"
+          onclick="clearOne('inventoryManagers')"
+        >
+          مسح
+        </button>
+
+      </div>
+
+      <div id="statusInventoryManagers" class="status"></div>
 
     </div>
 
@@ -560,6 +728,10 @@ button .emoji{
       readonly
       placeholder="ستظهر النتائج هنا بالترتيب..."
     ></textarea>
+
+    <div id="pointsReason" class="note" style="margin-top:9px;">
+      سبب إعطاء البوينتات سيظهر هنا بعد إكمال الاستبيانات.
+    </div>
 
     <div class="buttons">
 
@@ -867,11 +1039,17 @@ function clearAll(){
 
   document.getElementById('newMembers').value='';
   document.getElementById('outOfService').value='';
+  document.getElementById('responsibilitySupervisors').value='';
+  document.getElementById('inventoryManagers').value='';
   document.getElementById('output').value='';
 
   document.getElementById('statusNew').textContent='';
   document.getElementById('statusOut').textContent='';
+  document.getElementById('statusResponsibilitySupervisors').textContent='';
+  document.getElementById('statusInventoryManagers').textContent='';
   document.getElementById('status3').textContent='';
+  document.getElementById('pointsReason').textContent=
+    'سبب إعطاء البوينتات سيظهر هنا بعد إكمال الاستبيانات.';
 
   const container=
     document.getElementById('memberContainer');
@@ -1135,6 +1313,45 @@ function getMentionIds(text){
       : '';
 
   }).filter(Boolean);
+}
+
+
+/* =========================
+   نقاط قوائم المسؤوليات والجرد
+========================= */
+
+function getRolePoints(text){
+
+  const memberId=getMemberId(text);
+
+  if(!memberId)
+    return 0;
+
+  const responsibilitySupervisors=
+    document
+      .getElementById('responsibilitySupervisors')
+      .value;
+
+  const inventoryManagers=
+    document
+      .getElementById('inventoryManagers')
+      .value;
+
+  const responsibilitySupervisorIds=
+    getMentionIds(responsibilitySupervisors);
+
+  const inventoryManagerIds=
+    getMentionIds(inventoryManagers);
+
+  let total=0;
+
+  if(responsibilitySupervisorIds.includes(memberId))
+    total+=200;
+
+  if(inventoryManagerIds.includes(memberId))
+    total+=150;
+
+  return total;
 }
 
 
@@ -1729,10 +1946,14 @@ function calculateSurvey(inv,resp){
     const hourPoints=
       hours*30;
 
+    const rolePoints=
+      getRolePoints(inv);
+
     const total=
       hourPoints+
       scenario+
-      bonus;
+      bonus+
+      rolePoints;
 
     const base=
       rating(total);
@@ -1915,6 +2136,9 @@ function calculateSurvey(inv,resp){
   const responsibilityPoints=
     responsibilityInteractionPoints(resp);
 
+  const rolePoints=
+    getRolePoints(inv);
+
   const hourPoints=
     hours*30;
 
@@ -1922,7 +2146,8 @@ function calculateSurvey(inv,resp){
     hourPoints+
     scenario+
     bonus+
-    responsibilityPoints;
+    responsibilityPoints+
+    rolePoints;
 
   const base=
     rating(total);
@@ -2041,6 +2266,168 @@ function calculateSurvey(inv,resp){
 
 
 /* =========================
+   سبب إعطاء البوينتات
+========================= */
+
+function getPointsReason(text, resp){
+
+  if(isMemberInventory(text)){
+
+    const rawHours=getMemberRobberyHours(text);
+    const hours=Math.round(rawHours);
+
+    const jew=findTriple(
+      text,
+      'عدد مراقبة المجوهرات + البنوك + اليخت'
+    );
+
+    const official=findTriple(
+      text,
+      'عدد مراقبة سيناريوهات البنك المركزي + الميترو + الاستوديو'
+    );
+
+    const shops=findTriple(
+      text,
+      'عدد مراقبة سرقة المنزل + بقالة + مصرف'
+    );
+
+    const scenario=
+      official.reduce((a,b)=>a+b,0)*6+
+      jew.reduce((a,b)=>a+b,0)*5+
+      shops.reduce((a,b)=>a+b,0)*3;
+
+    const imgLine=
+      getLine(text,'هل أكمل مراقبة 400 صورة خلال الأسبوع؟') ||
+      getLine(text,'هل أكمل مراقبة 300 صورة خلال الأسبوع؟') ||
+      getLine(text,'مجموع الصور للسرقات');
+
+    const imgCount=num(imgLine);
+
+    const reasons=[];
+
+    if(hours>0)
+      reasons.push('ساعات العمل: '+hours+' ساعة × 30 = '+(hours*30)+' نقطة');
+
+    if(scenario>0)
+      reasons.push('نقاط السيناريوهات = '+scenario+' نقطة');
+
+    if(imgCount>=400 || /400/.test(imgLine))
+      reasons.push('إكمال 400 صورة خلال الأسبوع = 50 نقطة');
+
+    if(hours>=16)
+      reasons.push('إكمال 16 ساعة خلال الأسبوع = 50 نقطة');
+
+    const rolePoints=getRolePoints(text);
+
+    if(rolePoints>0){
+
+      const memberId=getMemberId(text);
+      const supervisors=getMentionIds(
+        document.getElementById('responsibilitySupervisors').value
+      );
+      const managers=getMentionIds(
+        document.getElementById('inventoryManagers').value
+      );
+
+      if(supervisors.includes(memberId))
+        reasons.push('مشرف مسؤوليات = 200 نقطة');
+
+      if(managers.includes(memberId))
+        reasons.push('مسؤول جرد = 150 نقطة');
+    }
+
+    return reasons.length
+      ? reasons.join(' | ')
+      : 'لا توجد نقاط إضافية أو نقاط محسوبة من البيانات المدخلة.';
+  }
+
+  const rawHours=getLoginHours(text);
+  const hours=Math.round(rawHours);
+
+  const shared=num(
+    getLine(text,'عدد مراقبة السيناريو المشترك')
+  );
+
+  const jew=findTriple(
+    text,
+    'عدد مراقبة المجوهرات + البنوك + اليخت'
+  );
+
+  const official=findTriple(
+    text,
+    'عدد مراقبة سيناريوهات البنك المركزي + الميترو + الاستوديو'
+  );
+
+  const unsafe=
+    num(getLine(text,'السرقات بالمناطق غير الآمنة')) ||
+    num(getLine(text,'عدد مراقبة السرقات بالمناطق غير الآمنة'));
+
+  const shops=findTriple(
+    text,
+    'عدد مراقبة سرقة المنزل + بقالة + مصرف'
+  );
+
+  const scenario=
+    shared*8+
+    official.reduce((a,b)=>a+b,0)*6+
+    jew.reduce((a,b)=>a+b,0)*5+
+    unsafe*4+
+    shops.reduce((a,b)=>a+b,0)*3;
+
+  const imgLine=
+    getLine(text,'هل أكمل مراقبة 400 صورة خلال الأسبوع؟') ||
+    getLine(text,'هل أكمل مراقبة 300 صورة خلال الأسبوع؟');
+
+  const imgCount=num(imgLine);
+
+  const responsibilityPoints=
+    responsibilityInteractionPoints(resp);
+
+  const rolePoints=getRolePoints(text);
+
+  const reasons=[];
+
+  if(hours>0)
+    reasons.push('ساعات العمل: '+hours+' ساعة × 30 = '+(hours*30)+' نقطة');
+
+  if(scenario>0)
+    reasons.push('نقاط السيناريوهات = '+scenario+' نقطة');
+
+  if(hours>=16)
+    reasons.push('إكمال 16 ساعة خلال الأسبوع = 50 نقطة');
+
+  if(imgCount>=400 || /400/.test(imgLine))
+    reasons.push('إكمال 400 صورة خلال الأسبوع = 50 نقطة');
+
+  if(responsibilityPoints>0)
+    reasons.push('نقاط المسؤوليات = '+responsibilityPoints+' نقطة');
+
+  if(rolePoints>0){
+
+    const memberId=getMemberId(text);
+
+    const supervisors=getMentionIds(
+      document.getElementById('responsibilitySupervisors').value
+    );
+
+    const managers=getMentionIds(
+      document.getElementById('inventoryManagers').value
+    );
+
+    if(supervisors.includes(memberId))
+      reasons.push('مشرف مسؤوليات = 200 نقطة');
+
+    if(managers.includes(memberId))
+      reasons.push('مسؤول جرد = 150 نقطة');
+  }
+
+  return reasons.length
+    ? reasons.join(' | ')
+    : 'لا توجد نقاط إضافية أو نقاط محسوبة من البيانات المدخلة.';
+}
+
+
+/* =========================
    إكمال جميع الاستبيانات
 ========================= */
 
@@ -2085,7 +2472,9 @@ function completeSurvey(){
 
       infos.push(
         '👤 العضو '+(i+1)+': '+
-        result.info
+        result.info+
+        '\nسبب إعطاء البوينتات: '+
+        getPointsReason(inv,resp)
       );
     }
   }
@@ -2119,7 +2508,52 @@ function completeSurvey(){
       results.length+
       ' استبيان بنجاح.\n\n'+
       infos.join('\n\n');
+
+  document
+    .getElementById('pointsReason')
+    .textContent=
+      infos
+        .map(info=>{
+          const parts=info.split('\\nسبب إعطاء البوينتات: ');
+          return parts.length>1
+            ? parts[0]+' — سبب إعطاء البوينتات: '+parts[1]
+            : info;
+        })
+        .join('\n\n');
 }
+
+
+/* =========================
+   تأثير النقر للأزرار
+   ========================= */
+document.addEventListener('click',function(e){
+  const button=e.target.closest('button');
+
+  if(!button)
+    return;
+
+  const rect=button.getBoundingClientRect();
+
+  button.style.setProperty(
+    '--ripple-x',
+    (e.clientX-rect.left)+'px'
+  );
+
+  button.style.setProperty(
+    '--ripple-y',
+    (e.clientY-rect.top)+'px'
+  );
+
+  button.classList.remove('ripple');
+
+  void button.offsetWidth;
+
+  button.classList.add('ripple');
+
+  setTimeout(()=>{
+    button.classList.remove('ripple');
+  },600);
+});
 
 </script>
 
