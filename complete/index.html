@@ -1469,6 +1469,8 @@ function responsibilityRating(text){
       normalize(
         getLine(text,l)
       )
+      .replace(/^[٠-٩0-9]+\s*[\-–—.)/:：]*\s*/, '')
+      .replace(/^[0-9٠-٩]+[️⃣\uFE0F]?\s*/, '')
       .replace(/\s+/g,' ')
       .trim();
 
@@ -1498,7 +1500,7 @@ function responsibilityRating(text){
       vals.push(2);
 
     }else if(
-      /^(?:سي|سيئ|سي\s*ء|سيء|سى)$/.test(v)
+      /سي|سيئ|سي\s*ء|سيء|سى/.test(v)
     ){
 
       vals.push(0);
