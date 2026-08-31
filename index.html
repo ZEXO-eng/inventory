@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
@@ -522,7 +521,7 @@ h1 span{
 }
 
 /* =========================
-   DESIGNED & DEVELOPED BY
+   DESIGNED & DEVELOPED FOR
 ========================= */
 
 .creator-small{
@@ -538,7 +537,7 @@ h1 span{
 }
 
 /* =========================
-   اسم ZEXO
+   اسم ArabPure
 ========================= */
 
 .creator-name{
@@ -617,7 +616,7 @@ h1 span{
 }
 
 /* =========================
-   صمم بواسطة ZEXO
+   صمم لـ ArabPure
 ========================= */
 
 .creator-description{
@@ -676,15 +675,31 @@ h1 span{
   transition-delay:.44s;
 }
 
+.creator-section.show .creator-name span:nth-child(5){
+  transition-delay:.57s;
+}
+
+.creator-section.show .creator-name span:nth-child(6){
+  transition-delay:.70s;
+}
+
+.creator-section.show .creator-name span:nth-child(7){
+  transition-delay:.83s;
+}
+
+.creator-section.show .creator-name span:nth-child(8){
+  transition-delay:.96s;
+}
+
 /* =========================
-   لمعان مستمر لاسم ZEXO
+   لمعان مستمر لاسم ArabPure
 ========================= */
 
 .creator-section.show .creator-name{
-  animation:zexoGlow 2.8s ease-in-out infinite;
+  animation:arabPureGlow 2.8s ease-in-out infinite;
 }
 
-@keyframes zexoGlow{
+@keyframes arabPureGlow{
 
   0%{
     filter:
@@ -877,6 +892,8 @@ button{
     letter-spacing:-2px;
 
     padding:0 8px;
+
+    font-size:clamp(48px,13vw,100px);
   }
 
 }
@@ -889,7 +906,6 @@ button{
 <div class="site-bg">
   <div class="reflect-planet"></div>
 </div>
-
 
 <div class="wrap">
 
@@ -917,7 +933,6 @@ button{
 
   </div>
 
-
   <section class="hero">
 
     <div class="eyebrow">
@@ -938,9 +953,7 @@ button{
 
   </section>
 
-
   <section class="choices">
-
 
     <article
       class="card blue"
@@ -989,7 +1002,6 @@ button{
 
     </article>
 
-
     <article
       class="card orange"
       onclick="go('./transfer/')"
@@ -1032,7 +1044,6 @@ button{
       </div>
 
     </article>
-
 
     <article
       class="card cyan"
@@ -1077,14 +1088,11 @@ button{
 
     </article>
 
-
   </section>
-
 
   <div class="footer">
     نظام الجرد • اختر الأداة المناسبة للبدء
   </div>
-
 
   <section
     class="creator-section"
@@ -1093,42 +1101,37 @@ button{
 
     <div class="creator-content">
 
-
       <div class="creator-small">
-        DESIGNED &amp; DEVELOPED BY
+        DESIGNED &amp; DEVELOPED FOR
       </div>
-
 
       <h2
         class="creator-name"
-        aria-label="ZEXO"
+        aria-label="ArabPure"
       >
 
-        <span>Z</span>
-
-        <span>E</span>
-
-        <span>X</span>
-
-        <span>O</span>
+        <span>A</span>
+        <span>r</span>
+        <span>a</span>
+        <span>b</span>
+        <span>P</span>
+        <span>u</span>
+        <span>r</span>
+        <span>e</span>
 
       </h2>
 
-
       <div class="creator-line"></div>
 
-
       <div class="creator-description">
-        صمم بواسطة ZEXO
+       صمم بواسطة ZEXO
       </div>
-
 
     </div>
 
   </section>
 
 </div>
-
 
 <div
   class="modal"
@@ -1164,7 +1167,6 @@ button{
 
 </div>
 
-
 <script>
 
 function go(path){
@@ -1178,9 +1180,8 @@ function closeModal(){
     .remove('show');
 }
 
-
 /* =========================
-   ظهور قسم ZEXO
+   ظهور قسم ArabPure
 ========================= */
 
 const creatorSection =
